@@ -19,7 +19,6 @@ const registrarVoto = async (req, res) => {
   }
 };
 
-
 const obtenerTodos = async (req, res) => {
   try {
     const registros = await personaVotaService.getTodosLosRegistros();
@@ -52,9 +51,42 @@ const obtenerPorEleccion = async (req, res) => {
   }
 };
 
+
+const obtenerCircuitoAsignado = async (req, res) => {
+  try {
+    const { ci, id_eleccion } = req.params;
+    const resultado = await personaVotaService.obtenerCircuitoAsignado(ci, id_eleccion);
+
+    if (!resultado || resultado.length === 0) {
+      return res.status(404).json({ error: 'No se encontró circuito asignado para esa persona' });
+    }
+
+    res.json(resultado[0]);
+  } catch (err) {
+    console.error('🔴 Error al obtener circuito asignado:', err);
+    res.status(500).json({ error: 'Error al obtener circuito asignado' });
+  }
+};
+
+const obtenerNumeroCircuitoAsignado = async (req, res) => {
+  try {
+    const { ci, id_eleccion } = req.params;
+    const resultado = await personaVotaService.obtenerNumeroCircuitoAsignado(ci, id_eleccion);
+    if (!resultado || resultado.length === 0) {
+      return res.status(404).json({ error: 'No se encontró circuito asignado para esa persona' });
+    }
+    res.json({ numero_circuito: resultado[0].numero_circuito });
+  } catch (err) {
+    console.error('🔴 Error al obtener número de circuito asignado:', err);
+    res.status(500).json({ error: 'Error al obtener número de circuito asignado' });
+  }
+};
+
 module.exports = {
   registrarVoto,
   obtenerTodos,
   obtenerPorCI,
-  obtenerPorEleccion
+  obtenerPorEleccion,
+  obtenerCircuitoAsignado,
+  obtenerNumeroCircuitoAsignado
 };

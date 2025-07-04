@@ -36,10 +36,28 @@ const deleteLista = (id, callback) => {
   db.query(sql, [id], callback);
 };
 
+const getListasPorCircuitoYEleccion = (id_circuito, id_eleccion, callback) => {
+  const sql = `
+    SELECT l.id_lista, l.numero_lista, p.nombre AS partido
+    FROM Lista l
+    JOIN Lista_Apoya la ON l.id_lista = la.id_lista
+    JOIN Partido p ON la.id_partido = p.id_partido
+    WHERE l.id_departamento = (
+      SELECT e.id_departamento
+      FROM Circuito c
+      JOIN Establecimiento e ON c.id_establecimiento = e.id_establecimiento
+      WHERE c.id_circuito = ?
+    )
+    AND l.id_eleccion = ?
+  `;
+  db.query(sql, [id_circuito, id_eleccion], callback);
+};
+
 module.exports = {
   getAllListas,
   getListaById,
   createLista,
   updateLista,
-  deleteLista
+  deleteLista,
+  getListasPorCircuitoYEleccion
 };

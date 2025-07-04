@@ -11,6 +11,18 @@ const createVoto = async (req, res) => {
   }
 };
 
+// Nuevo: handler robusto para POST /votar
+const registrarVotoCompleto = async (req, res) => {
+  try {
+    const datos = req.body;
+    const result = await votoService.registrarVotoCompleto(datos);
+    res.status(201).json(result);
+  } catch (err) {
+    console.error('🔴 Error en registrarVotoCompleto:', err);
+    res.status(400).json({ error: err.message || 'Error al registrar el voto' });
+  }
+};
+
 const getAllVotos = async (req, res) => {
   try {
     const votos = await votoService.obtenerTodosLosVotos();
@@ -40,5 +52,6 @@ const getVotoById = async (req, res) => {
 module.exports = {
   createVoto,
   getAllVotos,
-  getVotoById
+  getVotoById,
+  registrarVotoCompleto
 };

@@ -46,10 +46,20 @@ const eliminarLista = (id) => {
   });
 };
 
+const obtenerListasPorCircuitoYEleccion = (id_circuito, id_eleccion) => {
+  return new Promise((resolve, reject) => {
+    listaModel.getListasPorCircuitoYEleccion(id_circuito, id_eleccion, (err, results) => {
+      if (err) return reject(err);
+      resolve(results);
+    });
+  });
+};
+
 module.exports = {
   obtenerTodasLasListas,
   obtenerListaPorId,
   crearLista,
   actualizarLista,
-  eliminarLista
+  eliminarLista,
+  obtenerListasPorCircuitoYEleccion
 };

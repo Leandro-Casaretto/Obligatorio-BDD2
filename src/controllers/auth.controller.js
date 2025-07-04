@@ -16,6 +16,8 @@ const login = (req, res) => {
       usuario: {
         ci: result.usuario.ci,
         cc: result.usuario.cc,
+        nombre: result.usuario.nombre,
+        apellido: result.usuario.apellido,
       },
       token: result.token,
     });
