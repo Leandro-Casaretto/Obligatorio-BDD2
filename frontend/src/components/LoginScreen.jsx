@@ -2,11 +2,13 @@ import { useState } from 'react';
 import { TextField, Button, Typography, Container, Box, Alert, Paper } from '@mui/material';
 import HowToVoteIcon from '@mui/icons-material/HowToVote';
 import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
 
-function LoginScreen({ onLoginSuccess }) {
+function LoginScreen() {
   const [cc, setCC] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const { login } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -14,8 +16,7 @@ function LoginScreen({ onLoginSuccess }) {
 
     try {
       const res = await axios.post('http://localhost:3000/auth/login', { cc, password });
-      localStorage.setItem('token', res.data.token);
-      onLoginSuccess(res.data.usuario);
+      login(res.data.usuario, res.data.token);
     } catch (err) {
       setError('Credenciales inválidas');
     }
