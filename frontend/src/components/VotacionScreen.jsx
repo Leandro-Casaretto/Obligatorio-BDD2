@@ -11,11 +11,8 @@ function VotacionScreen({ idEleccion = 1, idCircuito, onVotar, onVolver }) {
   const [error, setError] = useState('');
   const [seleccion, setSeleccion] = useState(null);
   const [confirmado, setConfirmado] = useState(false);
-<<<<<<< HEAD
-=======
   const [mensaje, setMensaje] = useState('');
   const [enviando, setEnviando] = useState(false);
->>>>>>> bfd4c8b88f8d0b830f2f1771b3ce32842dc87628
 
   useEffect(() => {
     const fetchListas = async () => {
@@ -36,33 +33,20 @@ function VotacionScreen({ idEleccion = 1, idCircuito, onVotar, onVolver }) {
   const handleSeleccion = (id_lista) => {
     setSeleccion(id_lista);
     setConfirmado(false);
-<<<<<<< HEAD
-=======
     setMensaje('');
     setError('');
->>>>>>> bfd4c8b88f8d0b830f2f1771b3ce32842dc87628
   };
 
   const handleVotoBlanco = () => {
     setSeleccion('blanco');
     setConfirmado(false);
-<<<<<<< HEAD
-=======
     setMensaje('');
     setError('');
->>>>>>> bfd4c8b88f8d0b830f2f1771b3ce32842dc87628
   };
 
   const handleVotoNulo = () => {
     setSeleccion('nulo');
     setConfirmado(false);
-<<<<<<< HEAD
-  };
-
-  const handleConfirmar = () => {
-    setConfirmado(true);
-    // Aquí puedes llamar a onVotar(seleccion) para emitir el voto
-=======
     setMensaje('');
     setError('');
   };
@@ -94,7 +78,6 @@ function VotacionScreen({ idEleccion = 1, idCircuito, onVotar, onVolver }) {
     } finally {
       setEnviando(false);
     }
->>>>>>> bfd4c8b88f8d0b830f2f1771b3ce32842dc87628
   };
 
   return (
@@ -113,11 +96,7 @@ function VotacionScreen({ idEleccion = 1, idCircuito, onVotar, onVolver }) {
           <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
             <CircularProgress />
           </Box>
-<<<<<<< HEAD
-        ) : error ? (
-=======
         ) : error && !confirmado ? (
->>>>>>> bfd4c8b88f8d0b830f2f1771b3ce32842dc87628
           <Alert severity="error">{error}</Alert>
         ) : (
           <>
@@ -184,17 +163,6 @@ function VotacionScreen({ idEleccion = 1, idCircuito, onVotar, onVolver }) {
               </Alert>
             )}
             <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, mt: 2 }}>
-<<<<<<< HEAD
-              <Button variant="outlined" onClick={onVolver}>VOLVER</Button>
-              <Button variant="contained" color="primary" disabled={!seleccion} onClick={handleConfirmar}>
-                CONFIRMAR VOTO
-              </Button>
-            </Box>
-            {confirmado && (
-              <Alert severity="success" sx={{ mt: 2 }}>
-                ¡Voto registrado! (Aquí deberías llamar a la API para guardar el voto)
-              </Alert>
-=======
               <Button variant="outlined" onClick={onVolver} disabled={enviando || confirmado}>VOLVER</Button>
               <Button variant="contained" color="primary" disabled={!seleccion || enviando || confirmado} onClick={handleConfirmar}>
                 {enviando ? 'Enviando...' : 'CONFIRMAR VOTO'}
@@ -205,7 +173,6 @@ function VotacionScreen({ idEleccion = 1, idCircuito, onVotar, onVolver }) {
             )}
             {error && confirmado && (
               <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>
->>>>>>> bfd4c8b88f8d0b830f2f1771b3ce32842dc87628
             )}
           </>
         )}
