@@ -51,10 +51,23 @@ const deleteLista = async (req, res) => {
   }
 };
 
+const getListasPorCircuitoYEleccion = async (req, res) => {
+  try {
+    const { id_circuito, id_eleccion } = req.params;
+    const listas = await listaService.obtenerListasPorCircuitoYEleccion(id_circuito, id_eleccion);
+    res.json(listas);
+  } catch (err) {
+    console.error('🔴 Error en getListasPorCircuitoYEleccion:', err);
+    res.status(500).json({ error: 'Error al obtener listas por circuito y elección' });
+  }
+};
+
+
 module.exports = {
   getAllListas,
   getListaById,
   createLista,
   updateLista,
-  deleteLista
+  deleteLista,
+  getListasPorCircuitoYEleccion
 };

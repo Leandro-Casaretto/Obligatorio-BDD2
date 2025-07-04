@@ -45,9 +45,31 @@ const getVotosPorEleccion = (id_eleccion) => {
   });
 };
 
+
+const obtenerCircuitoAsignado = (ci, id_eleccion) => {
+  return new Promise((resolve, reject) => {
+    personaVotaModel.obtenerCircuitoAsignado(ci, id_eleccion, (err, result) => {
+      if (err) return reject(err);
+      resolve(result);
+    });
+  });
+};
+
+const obtenerNumeroCircuitoAsignado = (ci, id_eleccion) => {
+  return new Promise((resolve, reject) => {
+    personaVotaModel.obtenerNumeroCircuitoAsignado(ci, id_eleccion, (err, result) => {
+      if (err) return reject(err);
+      resolve(result);
+    });
+  });
+};
+
 module.exports = {
   crearRegistroVotoPersona,
   getTodosLosRegistros,
   getVotosPorCI,
-  getVotosPorEleccion
+  getVotosPorEleccion,
+  obtenerCircuitoAsignado,
+  obtenerNumeroCircuitoAsignado
+
 };

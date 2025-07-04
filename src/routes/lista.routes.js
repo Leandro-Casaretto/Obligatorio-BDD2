@@ -8,5 +8,6 @@ router.get('/:id', listaController.getListaById);
 router.post('/', validarLista, listaController.createLista);
 router.put('/:id', validarLista, listaController.updateLista);
 router.delete('/:id', listaController.deleteLista);
+router.get('/por-circuito/:id_circuito/:id_eleccion', listaController.getListasPorCircuitoYEleccion);
 
 module.exports = router;

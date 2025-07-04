@@ -1,7 +1,7 @@
-// hash.js
+
 const bcrypt = require('bcrypt');
 
-const password = 'clave123';
+const password = 'estasi';
 
 bcrypt.hash(password, 10, (err, hash) => {
   if (err) throw err;

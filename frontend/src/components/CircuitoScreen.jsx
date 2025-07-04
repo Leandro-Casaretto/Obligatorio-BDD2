@@ -7,21 +7,27 @@ import axios from 'axios';
 function CircuitoScreen({ idEleccion = 1, onContinuar, onVolver }) {
   const { usuario } = useAuth();
   const [numeroCircuito, setNumeroCircuito] = useState(null);
+  const [idCircuito, setIdCircuito] = useState(null);
   const [inputCircuito, setInputCircuito] = useState('');
   const [verificado, setVerificado] = useState(false);
   const [mensaje, setMensaje] = useState('');
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const fetchNumeroCircuito = async () => {
+    // Obtener número de circuito visible y el id_circuito desde el backend
+    const fetchCircuito = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/persona-vota/${usuario.ci}/${idEleccion}/numero-circuito`);
-        setNumeroCircuito(res.data.numero_circuito);
+        // Obtener ambos datos: id_circuito y numero_circuito
+        const res = await axios.get(`http://localhost:3000/persona-vota/${usuario.ci}/${idEleccion}`);
+        setIdCircuito(res.data.id_circuito);
+        // Ahora obtener el número visible
+        const resNum = await axios.get(`http://localhost:3000/persona-vota/${usuario.ci}/${idEleccion}/numero-circuito`);
+        setNumeroCircuito(resNum.data.numero_circuito);
       } catch (err) {
-        setError('No se pudo obtener el número de circuito asignado.');
+        setError('No se pudo obtener el circuito asignado.');
       }
     };
-    if (usuario?.ci) fetchNumeroCircuito();
+    if (usuario?.ci) fetchCircuito();
   }, [usuario, idEleccion]);
 
   const handleVerificar = (e) => {
@@ -33,7 +39,13 @@ function CircuitoScreen({ idEleccion = 1, onContinuar, onVolver }) {
       setVerificado(true);
       setMensaje('Circuito verificado correctamente. Puede continuar con el proceso de votación.');
     } else {
-      setError('El circuito ingresado no coincide con el asignado.');
+      setError('El circuito ingresado no coincide con el asignado. Se notificará al presidente de mesa');
+    }
+  };
+
+  const handleContinuar = () => {
+    if (verificado && idCircuito) {
+      onContinuar(idCircuito);
     }
   };
 
@@ -79,7 +91,7 @@ function CircuitoScreen({ idEleccion = 1, onContinuar, onVolver }) {
         {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
         <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, mt: 2 }}>
           <Button variant="outlined" onClick={onVolver}>VOLVER</Button>
-          <Button variant="contained" color="primary" disabled={!verificado} onClick={onContinuar}>
+          <Button variant="contained" color="primary" disabled={!verificado} onClick={handleContinuar}>
             CONTINUAR A VOTACIÓN
           </Button>
         </Box>
