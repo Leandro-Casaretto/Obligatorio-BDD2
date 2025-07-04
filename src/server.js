@@ -22,6 +22,7 @@ const votoPapeletaRoutes = require('./routes/votoPapeleta.routes');
 const personaVotaRoutes = require('./routes/personaVota.routes');
 const listaApoyaRoutes = require('./routes/listaApoya.routes');
 const candidatoListaRoutes = require('./routes/candidatoLista.routes');
+const resultadosRoutes = require('./routes/resultados.routes');
 
 
 const app = express();
@@ -57,5 +58,6 @@ app.use('/voto-papeleta', votoPapeletaRoutes);
 app.use('/persona-vota', personaVotaRoutes);
 app.use('/lista-apoya', listaApoyaRoutes);
 app.use('/candidato-lista', candidatoListaRoutes);
+app.use('/resultados', resultadosRoutes);
 
 
