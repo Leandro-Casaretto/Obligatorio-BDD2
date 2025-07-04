@@ -29,6 +29,16 @@ const crearRegistroVotoPersona = (datos, callback) => {
   db.query(sql, [ci, id_circuito, id_eleccion, fecha, es_observado], callback);
 };
 
+const actualizarRegistroVotoPersona = (datos, callback) => {
+  const { ci, id_eleccion, fecha, es_observado } = datos;
+  const sql = `
+    UPDATE Persona_Vota
+    SET fecha = ?, es_observado = ?
+    WHERE ci = ? AND id_eleccion = ?
+  `;
+  db.query(sql, [fecha, es_observado, ci, id_eleccion], callback);
+};
+
 const getTodosLosRegistros = (callback) => {
   const sql = `
     SELECT * FROM Persona_Vota
@@ -61,6 +71,7 @@ const verificarSiYaVoto = (ci, id_eleccion, callback) => {
 
 module.exports = {
   crearRegistroVotoPersona,
+  actualizarRegistroVotoPersona,
   getTodosLosRegistros,
   getVotosPorCI,
   getVotosPorEleccion,

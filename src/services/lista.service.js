@@ -55,7 +55,10 @@ const obtenerListasPorCircuitoYEleccion = (id_circuito, id_eleccion) => {
   });
 };
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> bfd4c8b88f8d0b830f2f1771b3ce32842dc87628
 module.exports = {
   obtenerTodasLasListas,
   obtenerListaPorId,

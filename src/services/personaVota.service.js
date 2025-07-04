@@ -18,6 +18,15 @@ const crearRegistroVotoPersona = (datos) => {
   });
 };
 
+const actualizarRegistroVotoPersona = (datos) => {
+  return new Promise((resolve, reject) => {
+    personaVotaModel.actualizarRegistroVotoPersona(datos, (err, result) => {
+      if (err) return reject(err);
+      resolve(result);
+    });
+  });
+};
+
 const getTodosLosRegistros = () => {
   return new Promise((resolve, reject) => {
     personaVotaModel.getTodosLosRegistros((err, results) => {
@@ -66,10 +75,14 @@ const obtenerNumeroCircuitoAsignado = (ci, id_eleccion) => {
 
 module.exports = {
   crearRegistroVotoPersona,
+  actualizarRegistroVotoPersona,
   getTodosLosRegistros,
   getVotosPorCI,
   getVotosPorEleccion,
   obtenerCircuitoAsignado,
   obtenerNumeroCircuitoAsignado
+<<<<<<< HEAD
 
+=======
+>>>>>>> bfd4c8b88f8d0b830f2f1771b3ce32842dc87628
 };

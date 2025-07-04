@@ -88,5 +88,9 @@ module.exports = {
   obtenerPorCI,
   obtenerPorEleccion,
   obtenerCircuitoAsignado,
+<<<<<<< HEAD
   obtenerNumeroCircuitoAsignado, 
+=======
+  obtenerNumeroCircuitoAsignado
+>>>>>>> bfd4c8b88f8d0b830f2f1771b3ce32842dc87628
 };

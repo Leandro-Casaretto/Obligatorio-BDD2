@@ -1,7 +1,6 @@
-// src/routes/protegido.routes.js
 const express = require('express');
 const router = express.Router();
-const verifyToken = require('../middlewares/auth.middleware'); // asegurate que esta bien
+const verifyToken = require('../middlewares/auth.middleware');
 
 router.get('/', verifyToken, (req, res) => {
   res.json({
