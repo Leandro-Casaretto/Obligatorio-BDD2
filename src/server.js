@@ -1,6 +1,7 @@
 const express = require('express');
 const db = require('./db');
 require('dotenv').config();
+const cors = require('cors');
 
 const personaRoutes = require('./routes/persona.routes');
 const departamentoRoutes = require('./routes/departamento.routes');
@@ -23,9 +24,12 @@ const personaVotaRoutes = require('./routes/personaVota.routes');
 const listaApoyaRoutes = require('./routes/listaApoya.routes');
 const candidatoListaRoutes = require('./routes/candidatoLista.routes');
 const resultadosRoutes = require('./routes/resultados.routes');
+const authRoutes = require('./routes/auth.routes');
+const protegidoRoutes = require('./routes/protegido.routes');
 
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 app.get('/', (req, res) => {
@@ -59,5 +63,6 @@ app.use('/persona-vota', personaVotaRoutes);
 app.use('/lista-apoya', listaApoyaRoutes);
 app.use('/candidato-lista', candidatoListaRoutes);
 app.use('/resultados', resultadosRoutes);
-
+app.use('/auth', authRoutes);
+app.use('/protegido', protegidoRoutes);
 
