@@ -24,6 +24,32 @@ const login = (req, res) => {
   });
 };
 
+const loginPresidente = (req, res) => {
+  const { cc, password } = req.body;
+
+  if (!cc || !password) {
+    return res.status(400).json({ error: 'Credencial y contraseña requeridas.' });
+  }
+
+  authService.loginPresidente(cc, password, (err, result) => {
+    if (err) return res.status(500).json({ error: 'Error interno del servidor.' });
+    if (!result) return res.status(401).json({ error: 'Credenciales incorrectas.' });
+    if (result.error) return res.status(403).json({ error: result.error });
+
+    res.json({
+      mensaje: 'Login de presidente exitoso',
+      usuario: {
+        ci: result.usuario.ci,
+        cc: result.usuario.cc,
+        nombre: result.usuario.nombre,
+        apellido: result.usuario.apellido,
+      },
+      mesa: result.mesa,
+      token: result.token,
+    });
+  });
+};
+
 const registrarUsuario = async (req, res) => {
   try {
     const { ci, cc, password } = req.body;
@@ -40,4 +66,4 @@ const registrarUsuario = async (req, res) => {
   }
 };
 
-module.exports = { login, registrarUsuario };
+module.exports = { login, registrarUsuario, loginPresidente };

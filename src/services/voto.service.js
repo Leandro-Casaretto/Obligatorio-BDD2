@@ -2,6 +2,7 @@ const votoModel = require('../models/voto.model');
 const votoListaService = require('./votoLista.service');
 const personaVotaService = require('./personaVota.service');
 const personaVotaModel = require('../models/personaVota.model');
+const mesaModel = require('../models/mesa.model');
 
 const crearVoto = (voto) => {
   return new Promise((resolve, reject) => {
@@ -45,6 +46,20 @@ const registrarVotoCompleto = async ({ ci, id_eleccion, id_circuito, tipo_voto, 
   }
   if (registros[0].fecha) {
     throw new Error('Ya has votado en esta elección.');
+  }
+
+  // 0.5. Verificar que la mesa esté abierta
+  const mesa = await new Promise((resolve, reject) => {
+    mesaModel.getMesaByCircuito(id_circuito, (err, result) => {
+      if (err) return reject(err);
+      resolve(result);
+    });
+  });
+  if (!mesa) {
+    throw new Error('No se encontró la mesa asociada a este circuito.');
+  }
+  if (mesa.estado !== 'abierta') {
+    throw new Error('No se puede votar porque la mesa está cerrada.');
   }
 
   // 1. Insertar voto
