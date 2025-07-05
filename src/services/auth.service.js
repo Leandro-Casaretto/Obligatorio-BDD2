@@ -44,7 +44,13 @@ const loginPresidente = (cc, password, callback) => {
         { expiresIn: '1h' }
       );
 
-      callback(null, { usuario, mesa, token });
+      callback(null, { usuario, mesa: {
+        id_mesa: mesa.id_mesa,
+        id_circuito: mesa.id_circuito,
+        id_departamento: mesa.id_departamento,
+        ci: mesa.ci,
+        rol: mesa.rol
+      }, token });
     });
   });
 };
