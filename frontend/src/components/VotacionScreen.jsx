@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 
 function VotacionScreen({ idEleccion = 1, idCircuito, onVotar, onVolver }) {
-  const { usuario } = useAuth();
+  const { usuario, logout } = useAuth();
   const [listas, setListas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -74,11 +74,27 @@ function VotacionScreen({ idEleccion = 1, idCircuito, onVotar, onVolver }) {
       setMensaje('¡Voto registrado exitosamente!');
       if (onVotar) onVotar();
     } catch (err) {
-      setError(err.response?.data?.error || 'Error al registrar el voto');
+      const errorMessage = err.response?.data?.error || 'Error al registrar el voto';
+      setError(errorMessage);
+      console.log('Error exacto:', errorMessage); // Debug
     } finally {
       setEnviando(false);
     }
   };
+
+  // Función para manejar el retorno al inicio
+  const handleVolverInicio = () => {
+    logout();
+    if (onVolver) onVolver();
+  };
+
+  // Verificar si el error es de "ya votó" - múltiples variaciones
+  const yaVoto = error && (
+    error.toLowerCase().includes('ya has votado') ||
+    error.toLowerCase().includes('ya votó') ||
+    error.toLowerCase().includes('ya votaste') ||
+    error.toLowerCase().includes('ya ha votado')
+  );
 
   return (
     <Box sx={{ minHeight: '100vh', minWidth: '100vw', backgroundColor: '#f7f9fb', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -97,7 +113,24 @@ function VotacionScreen({ idEleccion = 1, idCircuito, onVotar, onVolver }) {
             <CircularProgress />
           </Box>
         ) : error && !confirmado ? (
-          <Alert severity="error">{error}</Alert>
+          <Box sx={{ textAlign: 'center' }}>
+            <Alert severity="error" sx={{ mb: 3 }}>
+              <Typography variant="body1" sx={{ mb: 1 }}>
+                {error}
+              </Typography>
+            </Alert>
+            {yaVoto && (
+              <Button 
+                variant="contained" 
+                color="primary" 
+                size="large"
+                onClick={handleVolverInicio}
+                sx={{ fontWeight: 600 }}
+              >
+                VOLVER AL INICIO
+              </Button>
+            )}
+          </Box>
         ) : (
           <>
             <Grid container spacing={2} sx={{ mb: 2 }}>
