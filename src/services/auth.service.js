@@ -1,17 +1,12 @@
 const db = require('../db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const usuarioModel = require('../models/usuario.model');
 
 const login = (cc, password, callback) => {
-  const sql = `
-    SELECT u.*, p.nombre, p.apellido
-    FROM Usuario u
-    JOIN Persona p ON u.ci = p.ci
-    WHERE u.cc = ? AND u.habilitado = TRUE
-  `;
-  db.query(sql, [cc], async (err, results) => {
+  usuarioModel.verificarUsuario(cc, async (err, results) => {
     if (err) return callback(err);
-
+    
     const usuario = results[0];
     if (!usuario) return callback(null, null);
 
@@ -28,4 +23,20 @@ const login = (cc, password, callback) => {
   });
 };
 
-module.exports = { login };
+const registrarUsuario = (usuario) => {
+  return new Promise((resolve, reject) => {
+    // Verificar si el usuario ya existe
+    usuarioModel.getUsuarioPorCC(usuario.cc, (err, existingUser) => {
+      if (err) return reject(err);
+      if (existingUser) return reject(new Error('El usuario ya existe'));
+
+      // Crear el usuario
+      usuarioModel.crearUsuario(usuario, (err, result) => {
+        if (err) return reject(err);
+        resolve(result);
+      });
+    });
+  });
+};
+
+module.exports = { login, registrarUsuario };

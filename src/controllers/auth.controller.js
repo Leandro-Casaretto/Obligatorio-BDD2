@@ -24,4 +24,20 @@ const login = (req, res) => {
   });
 };
 
-module.exports = { login };
+const registrarUsuario = async (req, res) => {
+  try {
+    const { ci, cc, password } = req.body;
+
+    if (!ci || !cc || !password) {
+      return res.status(400).json({ error: 'CI, credencial cívica y contraseña son requeridos.' });
+    }
+
+    await authService.registrarUsuario({ ci, cc, password });
+    res.status(201).json({ mensaje: 'Usuario registrado correctamente' });
+  } catch (error) {
+    console.error('Error en registrarUsuario:', error);
+    res.status(400).json({ error: error.message });
+  }
+};
+
+module.exports = { login, registrarUsuario };
