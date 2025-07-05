@@ -3,11 +3,19 @@ import { useAuth } from './context/AuthContext';
 import LoginScreen from './components/LoginScreen';
 import CircuitoScreen from './components/CircuitoScreen';
 import VotacionScreen from './components/VotacionScreen';
+import ThankYouScreen from './components/ThankYouScreen';
 
 function App() {
-  const { usuario } = useAuth();
+  const { usuario, logout } = useAuth();
   const [pantalla, setPantalla] = useState('seleccion-circuito');
   const [idCircuito, setIdCircuito] = useState(null);
+
+  // Función para resetear el estado cuando vuelve al login
+  const resetearEstado = () => {
+    setPantalla('seleccion-circuito');
+    setIdCircuito(null);
+    logout(); // Cerrar sesión del usuario actual
+  };
 
   if (!usuario) return <LoginScreen />;
 
@@ -18,7 +26,7 @@ function App() {
           setIdCircuito(id_circuito);
           setPantalla('votacion');
         }}
-        onVolver={() => setPantalla('login')}
+        onVolver={resetearEstado}
       />
     );
   }
@@ -35,7 +43,11 @@ function App() {
   }
 
   if (pantalla === 'final') {
-    return <h2>¡Gracias por votar!</h2>;
+    return (
+      <ThankYouScreen 
+        onVolverALogin={resetearEstado}
+      />
+    );
   }
 
   return null;
