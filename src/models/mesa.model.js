@@ -27,10 +27,16 @@ const deleteMesa = (id, callback) => {
   db.query(sql, [id], callback);
 };
 
+const cerrarMesa = (id, callback) => {
+  const sql = 'UPDATE Mesa SET estado = ? WHERE id_mesa = ?';
+  db.query(sql, ['cerrada', id], callback);
+};
+
 module.exports = {
   getAllMesas,
   getMesaById,
   createMesa,
   updateMesa,
-  deleteMesa
+  deleteMesa,
+  cerrarMesa
 };

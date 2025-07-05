@@ -51,10 +51,21 @@ const deleteMesa = async (req, res) => {
   }
 };
 
+const cerrarMesa = async (req, res) => {
+  try {
+    await mesaService.cerrarMesa(req.params.id);
+    res.json({ mensaje: 'Mesa cerrada correctamente' });
+  } catch (err) {
+    console.error('🔴 Error en cerrarMesa:', err);
+    res.status(500).json({ error: 'No se pudo cerrar la mesa' });
+  }
+};
+
 module.exports = {
   getAllMesas,
   getMesaById,
   createMesa,
   updateMesa,
-  deleteMesa
+  deleteMesa,
+  cerrarMesa
 };

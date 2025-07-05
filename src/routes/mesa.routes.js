@@ -8,5 +8,6 @@ router.get('/:id', mesaController.getMesaById);
 router.post('/', validarMesa, mesaController.createMesa);
 router.put('/:id', validarMesa, mesaController.updateMesa);
 router.delete('/:id', mesaController.deleteMesa);
+router.patch('/:id/cerrar', mesaController.cerrarMesa);
 
 module.exports = router;

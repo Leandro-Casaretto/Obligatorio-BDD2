@@ -46,10 +46,20 @@ const eliminarMesa = (id) => {
   });
 };
 
+const cerrarMesa = (id) => {
+  return new Promise((resolve, reject) => {
+    mesaModel.cerrarMesa(id, (err) => {
+      if (err) return reject(err);
+      resolve();
+    });
+  });
+};
+
 module.exports = {
   obtenerTodasLasMesas,
   obtenerMesaPorId,
   crearMesa,
   actualizarMesa,
-  eliminarMesa
+  eliminarMesa,
+  cerrarMesa
 };
