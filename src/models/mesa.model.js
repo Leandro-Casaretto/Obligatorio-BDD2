@@ -10,6 +10,15 @@ const getMesaById = (id, callback) => {
   db.query(sql, [id], callback);
 };
 
+const getMesaByCircuito = (id_circuito, callback) => {
+  const sql = 'SELECT * FROM Mesa WHERE id_circuito = ? LIMIT 1';
+  db.query(sql, [id_circuito], (err, results) => {
+    if (err) return callback(err);
+    if (results.length === 0) return callback(null, null);
+    callback(null, results[0]);
+  });
+};
+
 const createMesa = (mesaData, callback) => {
   const { numero_mesa, estado, id_circuito } = mesaData;
   const sql = 'INSERT INTO Mesa (numero_mesa, estado, id_circuito) VALUES (?, ?, ?)';
@@ -35,6 +44,7 @@ const cerrarMesa = (id, callback) => {
 module.exports = {
   getAllMesas,
   getMesaById,
+  getMesaByCircuito,
   createMesa,
   updateMesa,
   deleteMesa,

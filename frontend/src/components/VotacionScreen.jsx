@@ -119,7 +119,7 @@ function VotacionScreen({ idEleccion = 1, idCircuito, onVotar, onVolver }) {
                 {error}
               </Typography>
             </Alert>
-            {yaVoto && (
+            {(yaVoto || (error && error.toLowerCase().includes('cerrada'))) && (
               <Button 
                 variant="contained" 
                 color="primary" 
