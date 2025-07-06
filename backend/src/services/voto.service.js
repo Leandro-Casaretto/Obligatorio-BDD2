@@ -83,7 +83,7 @@ const registrarVotoCompleto = async ({ ci, id_eleccion, id_circuito, tipo_voto, 
     await votoListaService.agregarVotoALista(id_voto, id_lista);
   }
 
-  // 3. Actualizar en Persona_Vota (setear fecha y es_observado)
+  // 3. Actualizar en persona_vota (setear fecha y es_observado)
   await personaVotaService.actualizarRegistroVotoPersona({
     ci,
     id_eleccion,
@@ -91,7 +91,7 @@ const registrarVotoCompleto = async ({ ci, id_eleccion, id_circuito, tipo_voto, 
     es_observado
   });
 
-  return { mensaje: 'Voto registrado exitosamente' };
+  return { mensaje: 'voto registrado exitosamente' };
 };
 
 module.exports = {

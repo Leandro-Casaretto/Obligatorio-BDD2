@@ -17,7 +17,7 @@ const getPersonaByCI = async (req, res) => {
     const persona = await personaService.obtenerPersonaPorCI(ci);
 
     if (!persona) {
-      return res.status(404).json({ error: 'Persona no encontrada' });
+      return res.status(404).json({ error: 'persona no encontrada' });
     }
 
     res.json(persona);
@@ -31,7 +31,7 @@ const crearPersona = async (req, res) => {
   try {
     const nuevaPersona = req.body;
     await personaService.crearPersona(nuevaPersona);
-    res.status(201).json({ mensaje: 'Persona creada correctamente' });
+    res.status(201).json({ mensaje: 'persona creada correctamente' });
   } catch (err) {
     console.error('Error en crearPersona:', err);
     res.status(500).json({ error: 'Error al crear persona' });
@@ -43,7 +43,7 @@ const actualizarPersona = async (req, res) => {
     const ci = req.params.ci;
     const datosActualizados = req.body;
     await personaService.actualizarPersona(ci, datosActualizados);
-    res.json({ mensaje: 'Persona actualizada correctamente' });
+    res.json({ mensaje: 'persona actualizada correctamente' });
   } catch (err) {
     console.error('Error en actualizarPersona:', err);
     res.status(500).json({ error: 'Error al actualizar persona' });
@@ -54,7 +54,7 @@ const eliminarPersona = async (req, res) => {
   try {
     const ci = req.params.ci;
     await personaService.eliminarPersona(ci);
-    res.json({ mensaje: 'Persona eliminada correctamente' });
+    res.json({ mensaje: 'persona eliminada correctamente' });
   } catch (err) {
     console.error('Error en eliminarPersona:', err);
     res.status(500).json({ error: 'Error al eliminar persona' });

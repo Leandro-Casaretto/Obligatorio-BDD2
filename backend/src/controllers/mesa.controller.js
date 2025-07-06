@@ -13,7 +13,7 @@ const getAllMesas = async (req, res) => {
 const getMesaById = async (req, res) => {
   try {
     const mesa = await mesaService.obtenerMesaPorId(req.params.id);
-    if (!mesa) return res.status(404).json({ error: 'Mesa no encontrada' });
+    if (!mesa) return res.status(404).json({ error: 'mesa no encontrada' });
     res.json(mesa);
   } catch (err) {
     console.error('🔴 Error en getMesaById:', err);
@@ -44,7 +44,7 @@ const updateMesa = async (req, res) => {
 const deleteMesa = async (req, res) => {
   try {
     await mesaService.eliminarMesa(req.params.id);
-    res.json({ mensaje: 'Mesa eliminada correctamente' });
+    res.json({ mensaje: 'mesa eliminada correctamente' });
   } catch (err) {
     console.error('🔴 Error en deleteMesa:', err);
     res.status(500).json({ error: 'Error al eliminar la mesa' });
@@ -54,7 +54,7 @@ const deleteMesa = async (req, res) => {
 const cerrarMesa = async (req, res) => {
   try {
     await mesaService.cerrarMesa(req.params.id);
-    res.json({ mensaje: 'Mesa cerrada correctamente' });
+    res.json({ mensaje: 'mesa cerrada correctamente' });
   } catch (err) {
     console.error('🔴 Error en cerrarMesa:', err);
     res.status(500).json({ error: 'No se pudo cerrar la mesa' });

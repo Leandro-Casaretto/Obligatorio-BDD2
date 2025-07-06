@@ -12,7 +12,7 @@ const registrarVoto = async (req, res) => {
       es_observado,
     });
 
-    res.status(201).json({ mensaje: 'Voto registrado correctamente' });
+    res.status(201).json({ mensaje: 'voto registrado correctamente' });
   } catch (error) {
     console.error('🔴 Error en registrarVoto:', error);
     res.status(400).json({ error: error.message });

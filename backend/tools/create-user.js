@@ -40,7 +40,7 @@ const createUser = async () => {
     }
 
     // 1. Verificar si la persona ya existe
-    const checkPersona = 'SELECT * FROM Persona WHERE ci = ?';
+    const checkPersona = 'SELECT * FROM persona WHERE ci = ?';
     db.query(checkPersona, [ci], (err, personaResults) => {
       if (err) {
         console.log('❌ Error al verificar persona:', err.message);
@@ -52,28 +52,28 @@ const createUser = async () => {
         console.log('⚠️  La persona ya existe, actualizando datos...');
         
         // Actualizar persona
-        const updatePersona = 'UPDATE Persona SET cc = ?, nombre = ?, apellido = ? WHERE ci = ?';
+        const updatePersona = 'UPDATE persona SET cc = ?, nombre = ?, apellido = ? WHERE ci = ?';
         db.query(updatePersona, [cc, nombre, apellido, ci], (err, result) => {
           if (err) {
             console.log('❌ Error al actualizar persona:', err.message);
             rl.close();
             return;
           }
-          console.log('✅ Persona actualizada correctamente');
+          console.log('✅ persona actualizada correctamente');
           createOrUpdateUsuario();
         });
       } else {
         console.log('✅ Creando nueva persona...');
         
         // Crear persona
-        const createPersona = 'INSERT INTO Persona (ci, cc, nombre, apellido) VALUES (?, ?, ?, ?)';
+        const createPersona = 'INSERT INTO persona (ci, cc, nombre, apellido) VALUES (?, ?, ?, ?)';
         db.query(createPersona, [ci, cc, nombre, apellido], (err, result) => {
           if (err) {
             console.log('❌ Error al crear persona:', err.message);
             rl.close();
             return;
           }
-          console.log('✅ Persona creada correctamente');
+          console.log('✅ persona creada correctamente');
           createOrUpdateUsuario();
         });
       }
@@ -81,7 +81,7 @@ const createUser = async () => {
 
     const createOrUpdateUsuario = () => {
       // 2. Verificar si el usuario ya existe
-      const checkUsuario = 'SELECT * FROM Usuario WHERE cc = ?';
+      const checkUsuario = 'SELECT * FROM usuario WHERE cc = ?';
       db.query(checkUsuario, [cc], (err, usuarioResults) => {
         if (err) {
           console.log('❌ Error al verificar usuario:', err.message);
@@ -100,7 +100,7 @@ const createUser = async () => {
               return;
             }
 
-            const updateUsuario = 'UPDATE Usuario SET password = ? WHERE cc = ?';
+            const updateUsuario = 'UPDATE usuario SET password = ? WHERE cc = ?';
             db.query(updateUsuario, [hash, cc], (err, result) => {
               if (err) {
                 console.log('❌ Error al actualizar usuario:', err.message);
@@ -122,14 +122,14 @@ const createUser = async () => {
               return;
             }
 
-            const createUsuario = 'INSERT INTO Usuario (ci, cc, password, habilitado) VALUES (?, ?, ?, TRUE)';
+            const createUsuario = 'INSERT INTO usuario (ci, cc, password, habilitado) VALUES (?, ?, ?, TRUE)';
             db.query(createUsuario, [ci, cc, hash], (err, result) => {
               if (err) {
                 console.log('❌ Error al crear usuario:', err.message);
                 rl.close();
                 return;
               }
-              console.log('✅ Usuario creado correctamente');
+              console.log('✅ usuario creado correctamente');
               showSuccess();
             });
           });
@@ -138,7 +138,7 @@ const createUser = async () => {
     };
 
     const showSuccess = () => {
-      console.log('\n🎉 ¡Usuario creado/actualizado exitosamente!');
+      console.log('\n🎉 ¡usuario creado/actualizado exitosamente!');
       console.log('\n📝 Credenciales para login:');
       console.log(`   - CC: ${cc}`);
       console.log(`   - Contraseña: ${password}`);
@@ -147,8 +147,8 @@ const createUser = async () => {
       // Verificar que funciona
       const verifySql = `
         SELECT u.*, p.nombre, p.apellido
-        FROM Usuario u
-        JOIN Persona p ON u.ci = p.ci
+        FROM usuario u
+        JOIN persona p ON u.ci = p.ci
         WHERE u.cc = ? AND u.habilitado = TRUE
       `;
       

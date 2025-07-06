@@ -11,7 +11,7 @@ module.exports = (req, res, next) => {
     return res.status(400).json({ error: 'El orden debe ser un número positivo' });
   }
 
-  const sql = 'SELECT * FROM Candidato_Lista WHERE id_lista = ? AND orden = ?';
+  const sql = 'SELECT * FROM candidato_lista WHERE id_lista = ? AND orden = ?';
   db.query(sql, [id_lista, orden], (err, results) => {
     if (err) {
       console.error('Error al verificar orden duplicado:', err);

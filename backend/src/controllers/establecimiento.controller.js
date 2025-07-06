@@ -16,7 +16,7 @@ const getById = async (req, res) => {
     const est = await establecimientoService.obtenerPorId(id);
 
     if (!est) {
-      return res.status(404).json({ error: 'Establecimiento no encontrado' });
+      return res.status(404).json({ error: 'establecimiento no encontrado' });
     }
 
     res.json(est);
@@ -42,7 +42,7 @@ const update = async (req, res) => {
     const id = req.params.id;
     const datos = req.body;
     await establecimientoService.actualizar(id, datos);
-    res.json({ mensaje: 'Establecimiento actualizado' });
+    res.json({ mensaje: 'establecimiento actualizado' });
   } catch (err) {
     console.error('🔴 Error en update:', err);
     res.status(500).json({ error: 'Error al actualizar establecimiento' });
@@ -53,7 +53,7 @@ const remove = async (req, res) => {
   try {
     const id = req.params.id;
     await establecimientoService.eliminar(id);
-    res.json({ mensaje: 'Establecimiento eliminado' });
+    res.json({ mensaje: 'establecimiento eliminado' });
   } catch (err) {
     console.error('🔴 Error en remove:', err);
     res.status(500).json({ error: 'Error al eliminar establecimiento' });

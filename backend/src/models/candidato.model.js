@@ -2,30 +2,30 @@ const db = require('../db');
 
 const getAllCandidatos = (callback) => {
   const sql = `
-    SELECT Candidato.ci, Persona.nombre, Persona.apellido
-    FROM Candidato
-    JOIN Persona ON Candidato.ci = Persona.ci
+    SELECT candidato\.ci, persona\.nombre, persona\.apellido
+    FROM candidato
+    JOIN persona ON candidato\.ci = persona\.ci
   `;
   db.query(sql, callback);
 };
 
 const getCandidatoByCI = (ci, callback) => {
   const sql = `
-    SELECT Candidato.ci, Persona.nombre, Persona.apellido
-    FROM Candidato
-    JOIN Persona ON Candidato.ci = Persona.ci
-    WHERE Candidato.ci = ?
+    SELECT candidato\.ci, persona\.nombre, persona\.apellido
+    FROM candidato
+    JOIN persona ON candidato\.ci = persona\.ci
+    WHERE candidato\.ci = ?
   `;
   db.query(sql, [ci], callback);
 };
 
 const createCandidato = (ci, callback) => {
-  const sql = 'INSERT INTO Candidato (ci) VALUES (?)';
+  const sql = 'INSERT INTO candidato (ci) VALUES (?)';
   db.query(sql, [ci], callback);
 };
 
 const deleteCandidato = (ci, callback) => {
-  const sql = 'DELETE FROM Candidato WHERE ci = ?';
+  const sql = 'DELETE FROM candidato WHERE ci = ?';
   db.query(sql, [ci], callback);
 };
 

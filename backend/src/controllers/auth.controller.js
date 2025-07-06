@@ -59,7 +59,7 @@ const registrarUsuario = async (req, res) => {
     }
 
     await authService.registrarUsuario({ ci, cc, password });
-    res.status(201).json({ mensaje: 'Usuario registrado correctamente' });
+    res.status(201).json({ mensaje: 'usuario registrado correctamente' });
   } catch (error) {
     console.error('Error en registrarUsuario:', error);
     res.status(400).json({ error: error.message });

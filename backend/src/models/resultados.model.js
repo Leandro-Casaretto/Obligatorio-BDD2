@@ -7,11 +7,11 @@ const getResultadosPorLista = (id_circuito, callback) => {
       COALESCE(L.numero_lista, 'En Blanco') AS lista,
       COALESCE(P.nombre, 'En Blanco') AS partido,
       COUNT(V.id_voto) AS cantidad_votos
-    FROM Voto V
-    LEFT JOIN Voto_Lista VL ON V.id_voto = VL.id_voto
-    LEFT JOIN Lista L ON VL.id_lista = L.id_lista
-    LEFT JOIN Lista_Apoya LA ON L.id_lista = LA.id_lista
-    LEFT JOIN Partido P ON LA.id_partido = P.id_partido
+    FROM voto V
+    LEFT JOIN voto_lista VL ON V.id_voto = VL.id_voto
+    LEFT JOIN lista L ON VL.id_lista = L.id_lista
+    LEFT JOIN lista_apoya LA ON L.id_lista = LA.id_lista
+    LEFT JOIN partido P ON LA.id_partido = P.id_partido
     WHERE V.id_circuito = ? AND V.estado = 'válido'
     GROUP BY lista, partido
 
@@ -21,8 +21,8 @@ const getResultadosPorLista = (id_circuito, callback) => {
       'En Blanco' AS lista,
       'En Blanco' AS partido,
       COUNT(*) AS cantidad_votos
-    FROM Voto
-    WHERE id_circuito = ? AND estado = 'válido' AND id_voto NOT IN (SELECT id_voto FROM Voto_Lista)
+    FROM voto
+    WHERE id_circuito = ? AND estado = 'válido' AND id_voto NOT IN (SELECT id_voto FROM voto_lista)
 
     UNION
 
@@ -30,7 +30,7 @@ const getResultadosPorLista = (id_circuito, callback) => {
       'Anulado' AS lista,
       'Anulado' AS partido,
       COUNT(*) AS cantidad_votos
-    FROM Voto
+    FROM voto
     WHERE id_circuito = ? AND estado = 'anulado'
     ORDER BY cantidad_votos DESC 
   `;
@@ -42,24 +42,24 @@ const getResultadosPorPartido = (id_circuito, callback) => {
     SELECT 
       COALESCE(P.nombre, 'En Blanco') AS partido,
       COUNT(*) AS cantidad_votos
-    FROM Voto V
-    LEFT JOIN Voto_Lista VL ON V.id_voto = VL.id_voto
-    LEFT JOIN Lista L ON VL.id_lista = L.id_lista
-    LEFT JOIN Lista_Apoya LA ON L.id_lista = LA.id_lista
-    LEFT JOIN Partido P ON LA.id_partido = P.id_partido
+    FROM voto V
+    LEFT JOIN voto_lista VL ON V.id_voto = VL.id_voto
+    LEFT JOIN lista L ON VL.id_lista = L.id_lista
+    LEFT JOIN lista_apoya LA ON L.id_lista = LA.id_lista
+    LEFT JOIN partido P ON LA.id_partido = P.id_partido
     WHERE V.id_circuito = ? AND V.estado = 'válido'
     GROUP BY partido
 
     UNION
 
     SELECT 'En Blanco' AS partido, COUNT(*) 
-    FROM Voto 
-    WHERE id_circuito = ? AND estado = 'válido' AND id_voto NOT IN (SELECT id_voto FROM Voto_Lista)
+    FROM voto 
+    WHERE id_circuito = ? AND estado = 'válido' AND id_voto NOT IN (SELECT id_voto FROM voto_lista)
 
     UNION
 
     SELECT 'Anulado' AS partido, COUNT(*) 
-    FROM Voto 
+    FROM voto 
     WHERE id_circuito = ? AND estado = 'anulado'
     ORDER BY cantidad_votos DESC
   `;
@@ -72,26 +72,26 @@ const getResultadosPorCandidato = (id_circuito, callback) => {
       COALESCE(PA.nombre, 'En Blanco') AS partido,
       COALESCE(PER.nombre, 'En Blanco') AS candidato,
       COUNT(V.id_voto) AS cantidad_votos
-    FROM Voto V
-    LEFT JOIN Voto_Lista VL ON V.id_voto = VL.id_voto
-    LEFT JOIN Lista L ON VL.id_lista = L.id_lista
-    LEFT JOIN Lista_Apoya LA ON L.id_lista = LA.id_lista
-    LEFT JOIN Partido PA ON LA.id_partido = PA.id_partido
-    LEFT JOIN FormulaPresidencial FP ON LA.id_formula = FP.id_formula
-    LEFT JOIN Persona PER ON FP.ci_presidente = PER.ci
+    FROM voto V
+    LEFT JOIN voto_lista VL ON V.id_voto = VL.id_voto
+    LEFT JOIN lista L ON VL.id_lista = L.id_lista
+    LEFT JOIN lista_apoya LA ON L.id_lista = LA.id_lista
+    LEFT JOIN partido PA ON LA.id_partido = PA.id_partido
+    LEFT JOIN formulapresidencial FP ON LA.id_formula = FP.id_formula
+    LEFT JOIN persona PER ON FP.ci_presidente = PER.ci
     WHERE V.id_circuito = ? AND V.estado = 'válido'
     GROUP BY partido, candidato
 
     UNION
 
     SELECT 'En Blanco', 'En Blanco', COUNT(*) 
-    FROM Voto 
-    WHERE id_circuito = ? AND estado = 'válido' AND id_voto NOT IN (SELECT id_voto FROM Voto_Lista)
+    FROM voto 
+    WHERE id_circuito = ? AND estado = 'válido' AND id_voto NOT IN (SELECT id_voto FROM voto_lista)
 
     UNION
 
     SELECT 'Anulado', 'Anulado', COUNT(*) 
-    FROM Voto 
+    FROM voto 
     WHERE id_circuito = ? AND estado = 'anulado'
   `;
   db.query(sql, [id_circuito, id_circuito, id_circuito], callback);
@@ -99,7 +99,7 @@ const getResultadosPorCandidato = (id_circuito, callback) => {
 
 
 const getTotalVotosPorCircuito = (id_circuito, callback) => {
-  const sql = `SELECT COUNT(*) AS total FROM Voto WHERE id_circuito = ?`;
+  const sql = `SELECT COUNT(*) AS total FROM voto WHERE id_circuito = ?`;
   db.query(sql, [id_circuito], callback);
 };
 
@@ -111,13 +111,13 @@ const getResultadosPorListaDepartamento = (id_departamento, callback) => {
       COALESCE(L.numero_lista, 'En Blanco') AS lista,
       COALESCE(P.nombre, 'En Blanco') AS partido,
       COUNT(V.id_voto) AS cantidad_votos
-    FROM Voto V
-    LEFT JOIN Voto_Lista VL ON V.id_voto = VL.id_voto
-    LEFT JOIN Lista L ON VL.id_lista = L.id_lista
-    LEFT JOIN Lista_Apoya LA ON L.id_lista = LA.id_lista
-    LEFT JOIN Partido P ON LA.id_partido = P.id_partido
-    LEFT JOIN Circuito C ON V.id_circuito = C.id_circuito
-    LEFT JOIN Establecimiento E ON C.id_establecimiento = E.id_establecimiento
+    FROM voto V
+    LEFT JOIN voto_lista VL ON V.id_voto = VL.id_voto
+    LEFT JOIN lista L ON VL.id_lista = L.id_lista
+    LEFT JOIN lista_apoya LA ON L.id_lista = LA.id_lista
+    LEFT JOIN partido P ON LA.id_partido = P.id_partido
+    LEFT JOIN circuito C ON V.id_circuito = C.id_circuito
+    LEFT JOIN establecimiento E ON C.id_establecimiento = E.id_establecimiento
     WHERE V.estado = 'válido' AND E.id_departamento = ?
     GROUP BY lista, partido
 
@@ -127,11 +127,11 @@ const getResultadosPorListaDepartamento = (id_departamento, callback) => {
       'En Blanco' AS lista,
       'En Blanco' AS partido,
       COUNT(*) AS cantidad_votos
-    FROM Voto V
-    LEFT JOIN Circuito C ON V.id_circuito = C.id_circuito
-    LEFT JOIN Establecimiento E ON C.id_establecimiento = E.id_establecimiento
+    FROM voto V
+    LEFT JOIN circuito C ON V.id_circuito = C.id_circuito
+    LEFT JOIN establecimiento E ON C.id_establecimiento = E.id_establecimiento
     WHERE V.estado = 'válido'
-      AND id_voto NOT IN (SELECT id_voto FROM Voto_Lista)
+      AND id_voto NOT IN (SELECT id_voto FROM voto_lista)
       AND E.id_departamento = ?
 
     UNION
@@ -140,9 +140,9 @@ const getResultadosPorListaDepartamento = (id_departamento, callback) => {
       'Anulado' AS lista,
       'Anulado' AS partido,
       COUNT(*) AS cantidad_votos
-    FROM Voto V
-    LEFT JOIN Circuito C ON V.id_circuito = C.id_circuito
-    LEFT JOIN Establecimiento E ON C.id_establecimiento = E.id_establecimiento
+    FROM voto V
+    LEFT JOIN circuito C ON V.id_circuito = C.id_circuito
+    LEFT JOIN establecimiento E ON C.id_establecimiento = E.id_establecimiento
     WHERE V.estado = 'anulado' AND E.id_departamento = ?
   `;
   db.query(sql, [id_departamento, id_departamento, id_departamento], callback);
@@ -154,32 +154,32 @@ const getResultadosPorPartidoDepartamento = (id_departamento, callback) => {
     SELECT 
       COALESCE(P.nombre, 'En Blanco') AS partido,
       COUNT(*) AS cantidad_votos
-    FROM Voto V
-    LEFT JOIN Voto_Lista VL ON V.id_voto = VL.id_voto
-    LEFT JOIN Lista L ON VL.id_lista = L.id_lista
-    LEFT JOIN Lista_Apoya LA ON L.id_lista = LA.id_lista
-    LEFT JOIN Partido P ON LA.id_partido = P.id_partido
-    LEFT JOIN Circuito C ON V.id_circuito = C.id_circuito
-    LEFT JOIN Establecimiento E ON C.id_establecimiento = E.id_establecimiento
+    FROM voto V
+    LEFT JOIN voto_lista VL ON V.id_voto = VL.id_voto
+    LEFT JOIN lista L ON VL.id_lista = L.id_lista
+    LEFT JOIN lista_apoya LA ON L.id_lista = LA.id_lista
+    LEFT JOIN partido P ON LA.id_partido = P.id_partido
+    LEFT JOIN circuito C ON V.id_circuito = C.id_circuito
+    LEFT JOIN establecimiento E ON C.id_establecimiento = E.id_establecimiento
     WHERE V.estado = 'válido' AND E.id_departamento = ?
     GROUP BY partido
 
     UNION
 
     SELECT 'En Blanco', COUNT(*) 
-    FROM Voto V
-    LEFT JOIN Circuito C ON V.id_circuito = C.id_circuito
-    LEFT JOIN Establecimiento E ON C.id_establecimiento = E.id_establecimiento
+    FROM voto V
+    LEFT JOIN circuito C ON V.id_circuito = C.id_circuito
+    LEFT JOIN establecimiento E ON C.id_establecimiento = E.id_establecimiento
     WHERE V.estado = 'válido' 
-      AND id_voto NOT IN (SELECT id_voto FROM Voto_Lista)
+      AND id_voto NOT IN (SELECT id_voto FROM voto_lista)
       AND E.id_departamento = ?
 
     UNION
 
     SELECT 'Anulado', COUNT(*) 
-    FROM Voto V
-    LEFT JOIN Circuito C ON V.id_circuito = C.id_circuito
-    LEFT JOIN Establecimiento E ON C.id_establecimiento = E.id_establecimiento
+    FROM voto V
+    LEFT JOIN circuito C ON V.id_circuito = C.id_circuito
+    LEFT JOIN establecimiento E ON C.id_establecimiento = E.id_establecimiento
     WHERE V.estado = 'anulado' AND E.id_departamento = ?
   `;
   db.query(sql, [id_departamento, id_departamento, id_departamento], callback);
@@ -192,16 +192,16 @@ const getResultadosPorCandidatoDepartamento = (id_departamento, callback) => {
       COALESCE(P.nombre, 'En Blanco') AS partido,
       COALESCE(PE.nombre, 'En Blanco') AS candidato,
       COUNT(V.id_voto) AS cantidad_votos
-    FROM Voto V
-    LEFT JOIN Voto_Lista VL ON V.id_voto = VL.id_voto
-    LEFT JOIN Lista L ON VL.id_lista = L.id_lista
-    LEFT JOIN Candidato_Lista CL ON L.id_lista = CL.id_lista AND CL.organo = 'presidente' AND CL.orden = 1
-    LEFT JOIN Candidato C ON CL.ci = C.ci
-    LEFT JOIN Persona PE ON C.ci = PE.ci
-    LEFT JOIN Lista_Apoya LA ON L.id_lista = LA.id_lista
-    LEFT JOIN Partido P ON LA.id_partido = P.id_partido
-    LEFT JOIN Circuito CI ON V.id_circuito = CI.id_circuito
-    LEFT JOIN Establecimiento E ON CI.id_establecimiento = E.id_establecimiento
+    FROM voto V
+    LEFT JOIN voto_lista VL ON V.id_voto = VL.id_voto
+    LEFT JOIN lista L ON VL.id_lista = L.id_lista
+    LEFT JOIN candidato_lista CL ON L.id_lista = CL.id_lista AND CL.organo = 'presidente' AND CL.orden = 1
+    LEFT JOIN candidato C ON CL.ci = C.ci
+    LEFT JOIN persona PE ON C.ci = PE.ci
+    LEFT JOIN lista_apoya LA ON L.id_lista = LA.id_lista
+    LEFT JOIN partido P ON LA.id_partido = P.id_partido
+    LEFT JOIN circuito CI ON V.id_circuito = CI.id_circuito
+    LEFT JOIN establecimiento E ON CI.id_establecimiento = E.id_establecimiento
     WHERE V.estado = 'válido' AND E.id_departamento = ?
     GROUP BY partido, candidato
 
@@ -209,20 +209,20 @@ const getResultadosPorCandidatoDepartamento = (id_departamento, callback) => {
 
     SELECT 
       'En Blanco', 'En Blanco', COUNT(*) 
-    FROM Voto V
-    LEFT JOIN Circuito C ON V.id_circuito = C.id_circuito
-    LEFT JOIN Establecimiento E ON C.id_establecimiento = E.id_establecimiento
+    FROM voto V
+    LEFT JOIN circuito C ON V.id_circuito = C.id_circuito
+    LEFT JOIN establecimiento E ON C.id_establecimiento = E.id_establecimiento
     WHERE V.estado = 'válido' 
-      AND id_voto NOT IN (SELECT id_voto FROM Voto_Lista)
+      AND id_voto NOT IN (SELECT id_voto FROM voto_lista)
       AND E.id_departamento = ?
 
     UNION
 
     SELECT 
       'Anulado', 'Anulado', COUNT(*) 
-    FROM Voto V
-    LEFT JOIN Circuito C ON V.id_circuito = C.id_circuito
-    LEFT JOIN Establecimiento E ON C.id_establecimiento = E.id_establecimiento
+    FROM voto V
+    LEFT JOIN circuito C ON V.id_circuito = C.id_circuito
+    LEFT JOIN establecimiento E ON C.id_establecimiento = E.id_establecimiento
     WHERE V.estado = 'anulado' AND E.id_departamento = ?
   `;
   db.query(sql, [id_departamento, id_departamento, id_departamento], callback);
@@ -235,26 +235,26 @@ const getCandidatoGanadorPorDepartamento = (callback) => {
       P.nombre AS partido,
       PE.nombre AS presidente,
       COUNT(V.id_voto) AS cantidad_votos
-    FROM Voto V
-    JOIN Circuito C ON V.id_circuito = C.id_circuito
-    JOIN Establecimiento E ON C.id_establecimiento = E.id_establecimiento
-    JOIN Departamento D ON E.id_departamento = D.id_departamento
-    JOIN Voto_Lista VL ON V.id_voto = VL.id_voto
-    JOIN Lista L ON VL.id_lista = L.id_lista
-    JOIN Lista_Apoya LA ON L.id_lista = LA.id_lista
-    JOIN FormulaPresidencial FP ON LA.id_formula = FP.id_formula
-    JOIN Persona PE ON FP.ci_presidente = PE.ci
-    JOIN Partido P ON FP.id_partido = P.id_partido
+    FROM voto V
+    JOIN circuito C ON V.id_circuito = C.id_circuito
+    JOIN establecimiento E ON C.id_establecimiento = E.id_establecimiento
+    JOIN departamento D ON E.id_departamento = D.id_departamento
+    JOIN voto_lista VL ON V.id_voto = VL.id_voto
+    JOIN lista L ON VL.id_lista = L.id_lista
+    JOIN lista_apoya LA ON L.id_lista = LA.id_lista
+    JOIN formulapresidencial FP ON LA.id_formula = FP.id_formula
+    JOIN persona PE ON FP.ci_presidente = PE.ci
+    JOIN partido P ON FP.id_partido = P.id_partido
     WHERE V.estado = 'válido'
     GROUP BY D.id_departamento, FP.id_formula
     HAVING COUNT(V.id_voto) >= ALL (
       SELECT COUNT(V2.id_voto)
-      FROM Voto V2
-      JOIN Circuito C2 ON V2.id_circuito = C2.id_circuito
-      JOIN Establecimiento E2 ON C2.id_establecimiento = E2.id_establecimiento
-      JOIN Voto_Lista VL2 ON V2.id_voto = VL2.id_voto
-      JOIN Lista L2 ON VL2.id_lista = L2.id_lista
-      JOIN Lista_Apoya LA2 ON L2.id_lista = LA2.id_lista
+      FROM voto V2
+      JOIN circuito C2 ON V2.id_circuito = C2.id_circuito
+      JOIN establecimiento E2 ON C2.id_establecimiento = E2.id_establecimiento
+      JOIN voto_lista VL2 ON V2.id_voto = VL2.id_voto
+      JOIN lista L2 ON VL2.id_lista = L2.id_lista
+      JOIN lista_apoya LA2 ON L2.id_lista = LA2.id_lista
       WHERE V2.estado = 'válido'
         AND E2.id_departamento = D.id_departamento
       GROUP BY LA2.id_formula
@@ -266,9 +266,9 @@ const getCandidatoGanadorPorDepartamento = (callback) => {
 const getTotalVotosPorDepartamento = (id_departamento, callback) => {
   const sql = `
     SELECT COUNT(*) AS total
-    FROM Voto V
-    JOIN Circuito C ON V.id_circuito = C.id_circuito
-    JOIN Establecimiento E ON C.id_establecimiento = E.id_establecimiento
+    FROM voto V
+    JOIN circuito C ON V.id_circuito = C.id_circuito
+    JOIN establecimiento E ON C.id_establecimiento = E.id_establecimiento
     WHERE E.id_departamento = ?
   `;
   db.query(sql, [id_departamento], callback);

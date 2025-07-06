@@ -7,10 +7,10 @@ const validarCandidato = (req, res, next) => {
     return res.status(400).json({ error: 'El campo CI es obligatorio' });
   }
 
-  const sql = 'SELECT * FROM Persona WHERE ci = ?';
+  const sql = 'SELECT * FROM persona WHERE ci = ?';
   db.query(sql, [ci], (err, results) => {
     if (err) {
-      console.error('🔴 Error al validar CI en Persona:', err);
+      console.error('🔴 Error al validar CI en persona:', err);
       return res.status(500).json({ error: 'Error al validar el CI' });
     }
 

@@ -9,7 +9,7 @@ const crearVotoPapeleta = async (req, res) => {
     }
 
     const result = await votoPapeletaService.asociarVotoPapeleta(id_voto, id_papeleta);
-    res.status(201).json({ mensaje: 'Voto asociado a papeleta correctamente' });
+    res.status(201).json({ mensaje: 'voto asociado a papeleta correctamente' });
   } catch (err) {
     console.error('🔴 Error en crearVotoPapeleta:', err);
     res.status(500).json({ error: 'Error al asociar voto a papeleta' });
@@ -21,7 +21,7 @@ const obtenerTodos = async (req, res) => {
     const votos = await votoPapeletaService.obtenerVotoPapeleta();
     res.json(votos);
   } catch (err) {
-    console.error('🔴 Error en obtenerTodos Voto_Papeleta:', err);
+    console.error('🔴 Error en obtenerTodos voto_papeleta:', err);
     res.status(500).json({ error: 'Error al obtener votos a papeletas' });
   }
 };

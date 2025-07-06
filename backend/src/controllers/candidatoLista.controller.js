@@ -4,7 +4,7 @@ const crearRelacion = async (req, res) => {
   try {
     const datos = req.body;
     const result = await candidatoListaService.crearRelacion(datos);
-    res.status(201).json({ mensaje: 'Candidato asociado a lista correctamente' });
+    res.status(201).json({ mensaje: 'candidato asociado a lista correctamente' });
   } catch (err) {
     console.error('🔴 Error al asociar candidato:', err);
     res.status(500).json({ error: 'Error al asociar candidato' });

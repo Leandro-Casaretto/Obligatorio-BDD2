@@ -16,7 +16,7 @@ const getPartidoById = async (req, res) => {
     const partido = await partidoService.obtenerPartidoPorId(id);
 
     if (!partido) {
-      return res.status(404).json({ error: 'Partido no encontrado' });
+      return res.status(404).json({ error: 'partido no encontrado' });
     }
 
     res.json(partido);
@@ -30,7 +30,7 @@ const createPartido = async (req, res) => {
   try {
     const partido = req.body;
     const result = await partidoService.crearPartido(partido);
-    res.status(201).json({ mensaje: 'Partido creado correctamente' });
+    res.status(201).json({ mensaje: 'partido creado correctamente' });
   } catch (err) {
     console.error('🔴 Error en createPartido:', err);
     res.status(500).json({ error: 'Error al crear partido' });
@@ -42,7 +42,7 @@ const updatePartido = async (req, res) => {
     const id = req.params.id;
     const partido = req.body;
     const result = await partidoService.actualizarPartido(id, partido);
-    res.json({ mensaje: 'Partido actualizado correctamente' });
+    res.json({ mensaje: 'partido actualizado correctamente' });
   } catch (err) {
     console.error('🔴 Error en updatePartido:', err);
     res.status(500).json({ error: 'Error al actualizar partido' });
@@ -53,7 +53,7 @@ const deletePartido = async (req, res) => {
   try {
     const id = req.params.id;
     const result = await partidoService.eliminarPartido(id);
-    res.json({ mensaje: 'Partido eliminado correctamente' });
+    res.json({ mensaje: 'partido eliminado correctamente' });
   } catch (err) {
     console.error('🔴 Error en deletePartido:', err);
     res.status(500).json({ error: 'Error al eliminar partido' });

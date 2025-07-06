@@ -15,20 +15,20 @@ const testAuth = async () => {
     const match = await bcrypt.compare(password, hash);
     console.log('✅ Verificación de hash:', match ? 'CORRECTO' : 'INCORRECTO');
 
-    // 3. Verificar estructura de la tabla Usuario
-    const checkTable = 'DESCRIBE Usuario';
+    // 3. Verificar estructura de la tabla usuario
+    const checkTable = 'DESCRIBE usuario';
     db.query(checkTable, (err, results) => {
       if (err) {
-        console.log('❌ Error al verificar tabla Usuario:', err.message);
+        console.log('❌ Error al verificar tabla usuario:', err.message);
         return;
       }
-      console.log('✅ Estructura de tabla Usuario:');
+      console.log('✅ Estructura de tabla usuario:');
       results.forEach(row => {
         console.log(`   - ${row.Field}: ${row.Type} ${row.Null === 'YES' ? '(NULL)' : '(NOT NULL)'}`);
       });
 
       // 4. Verificar si hay usuarios en la tabla
-      const checkUsers = 'SELECT COUNT(*) as count FROM Usuario';
+      const checkUsers = 'SELECT COUNT(*) as count FROM usuario';
       db.query(checkUsers, (err, results) => {
         if (err) {
           console.log('❌ Error al contar usuarios:', err.message);
@@ -38,7 +38,7 @@ const testAuth = async () => {
 
         // 5. Mostrar algunos usuarios si existen
         if (results[0].count > 0) {
-          const showUsers = 'SELECT ci, cc, habilitado FROM Usuario LIMIT 5';
+          const showUsers = 'SELECT ci, cc, habilitado FROM usuario LIMIT 5';
           db.query(showUsers, (err, results) => {
             if (err) {
               console.log('❌ Error al mostrar usuarios:', err.message);
@@ -51,18 +51,18 @@ const testAuth = async () => {
           });
         }
 
-        // 6. Verificar relación con tabla Persona
+        // 6. Verificar relación con tabla persona
         const checkPersona = `
           SELECT COUNT(*) as count 
-          FROM Usuario u 
-          JOIN Persona p ON u.ci = p.ci
+          FROM usuario u 
+          JOIN persona p ON u.ci = p.ci
         `;
         db.query(checkPersona, (err, results) => {
           if (err) {
-            console.log('❌ Error al verificar relación Persona:', err.message);
+            console.log('❌ Error al verificar relación persona:', err.message);
             return;
           }
-          console.log(`📋 Usuarios con datos de Persona: ${results[0].count}`);
+          console.log(`📋 Usuarios con datos de persona: ${results[0].count}`);
         });
       });
     });
