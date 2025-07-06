@@ -6,7 +6,7 @@ const crearVotoLista = async (req, res) => {
     const result = await votoListaService.agregarVotoALista(id_voto, id_lista);
     res.status(201).json({ mensaje: 'voto asociado a lista' });
   } catch (err) {
-    console.error('🔴 Error en crearVotoLista:', err);
+    console.error('Error en crearVotoLista:', err);
     res.status(500).json({ error: 'Error al asociar voto con lista' });
   }
 };
@@ -16,7 +16,7 @@ const obtenerVotosLista = async (req, res) => {
     const result = await votoListaService.listarVotosLista();
     res.json(result);
   } catch (err) {
-    console.error('🔴 Error en obtenerVotosLista:', err);
+    console.error('Error en obtenerVotosLista:', err);
     res.status(500).json({ error: 'Error al obtener votos por lista' });
   }
 };

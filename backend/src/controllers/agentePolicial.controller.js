@@ -5,7 +5,7 @@ const getAllAgentes = async (req, res) => {
     const agentes = await agenteService.obtenerTodosLosAgentes();
     res.json(agentes);
   } catch (err) {
-    console.error('🔴 Error en getAllAgentes:', err);
+    console.error('Error en getAllAgentes:', err);
     res.status(500).json({ error: 'Error al obtener agentes policiales' });
   }
 };
@@ -19,7 +19,7 @@ const getAgenteByCI = async (req, res) => {
     }
     res.json(agente);
   } catch (err) {
-    console.error('🔴 Error en getAgenteByCI:', err);
+    console.error('Error en getAgenteByCI:', err);
     res.status(500).json({ error: 'Error al buscar agente policial' });
   }
 };
@@ -30,7 +30,7 @@ const createAgente = async (req, res) => {
     const result = await agenteService.crearAgente(agente);
     res.status(201).json({ mensaje: 'Agente creado correctamente' });
   } catch (err) {
-    console.error('🔴 Error en createAgente:', err);
+    console.error('Error en createAgente:', err);
     res.status(500).json({ error: 'Error al crear agente policial' });
   }
 };
@@ -41,7 +41,7 @@ const deleteAgente = async (req, res) => {
     const result = await agenteService.eliminarAgente(ci);
     res.json({ mensaje: 'Agente eliminado correctamente' });
   } catch (err) {
-    console.error('🔴 Error en deleteAgente:', err);
+    console.error('Error en deleteAgente:', err);
     res.status(500).json({ error: 'Error al eliminar agente policial' });
   }
 };

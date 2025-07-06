@@ -5,7 +5,7 @@ const getAllSenados = async (req, res) => {
     const senados = await senadoService.obtenerTodosLosSenados();
     res.json(senados);
   } catch (err) {
-    console.error('🔴 Error en getAllSenados:', err);
+    console.error('Error en getAllSenados:', err);
     res.status(500).json({ error: 'Error al obtener senados' });
   }
 };
@@ -17,7 +17,7 @@ const getSenadoById = async (req, res) => {
     if (!senado) return res.status(404).json({ error: 'senado no encontrado' });
     res.json(senado);
   } catch (err) {
-    console.error('🔴 Error en getSenadoById:', err);
+    console.error('Error en getSenadoById:', err);
     res.status(500).json({ error: 'Error al buscar senado' });
   }
 };
@@ -27,7 +27,7 @@ const createSenado = async (req, res) => {
     const result = await senadoService.crearSenado(req.body);
     res.status(201).json({ mensaje: 'senado creado correctamente' });
   } catch (err) {
-    console.error('🔴 Error en createSenado:', err);
+    console.error('Error en createSenado:', err);
     res.status(500).json({ error: 'Error al crear senado' });
   }
 };
@@ -38,7 +38,7 @@ const updateSenado = async (req, res) => {
     const result = await senadoService.actualizarSenado(id, req.body);
     res.json({ mensaje: 'senado actualizado correctamente' });
   } catch (err) {
-    console.error('🔴 Error en updateSenado:', err);
+    console.error('Error en updateSenado:', err);
     res.status(500).json({ error: 'Error al actualizar senado' });
   }
 };
@@ -49,7 +49,7 @@ const deleteSenado = async (req, res) => {
     const result = await senadoService.eliminarSenado(id);
     res.json({ mensaje: 'senado eliminado correctamente' });
   } catch (err) {
-    console.error('🔴 Error en deleteSenado:', err);
+    console.error('Error en deleteSenado:', err);
     res.status(500).json({ error: 'Error al eliminar senado' });
   }
 };

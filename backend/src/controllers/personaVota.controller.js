@@ -14,7 +14,7 @@ const registrarVoto = async (req, res) => {
 
     res.status(201).json({ mensaje: 'voto registrado correctamente' });
   } catch (error) {
-    console.error('🔴 Error en registrarVoto:', error);
+    console.error('Error en registrarVoto:', error);
     res.status(400).json({ error: error.message });
   }
 };
@@ -24,7 +24,7 @@ const obtenerTodos = async (req, res) => {
     const registros = await personaVotaService.getTodosLosRegistros();
     res.json(registros);
   } catch (err) {
-    console.error('🔴 Error al obtener registros:', err);
+    console.error('Error al obtener registros:', err);
     res.status(500).json({ error: 'Error al obtener registros' });
   }
 };
@@ -35,7 +35,7 @@ const obtenerPorCI = async (req, res) => {
     const registros = await personaVotaService.getVotosPorCI(ci);
     res.json(registros);
   } catch (err) {
-    console.error('🔴 Error al obtener votos por CI:', err);
+    console.error('Error al obtener votos por CI:', err);
     res.status(500).json({ error: 'Error al obtener votos por CI' });
   }
 };
@@ -46,7 +46,7 @@ const obtenerPorEleccion = async (req, res) => {
     const registros = await personaVotaService.getVotosPorEleccion(id_eleccion);
     res.json(registros);
   } catch (err) {
-    console.error('🔴 Error al obtener votos por elección:', err);
+    console.error('Error al obtener votos por elección:', err);
     res.status(500).json({ error: 'Error al obtener votos por elección' });
   }
 };
@@ -63,7 +63,7 @@ const obtenerCircuitoAsignado = async (req, res) => {
 
     res.json(resultado[0]);
   } catch (err) {
-    console.error('🔴 Error al obtener circuito asignado:', err);
+    console.error('Error al obtener circuito asignado:', err);
     res.status(500).json({ error: 'Error al obtener circuito asignado' });
   }
 };
@@ -77,7 +77,7 @@ const obtenerNumeroCircuitoAsignado = async (req, res) => {
     }
     res.json({ numero_circuito: resultado[0].numero_circuito });
   } catch (err) {
-    console.error('🔴 Error al obtener número de circuito asignado:', err);
+    console.error('Error al obtener número de circuito asignado:', err);
     res.status(500).json({ error: 'Error al obtener número de circuito asignado' });
   }
 };

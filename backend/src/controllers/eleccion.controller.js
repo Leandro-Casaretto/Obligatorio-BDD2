@@ -5,7 +5,7 @@ const getAllElecciones = async (req, res) => {
     const elecciones = await eleccionService.obtenerTodasLasElecciones();
     res.json(elecciones);
   } catch (err) {
-    console.error('🔴 Error en getAllElecciones:', err);
+    console.error('Error en getAllElecciones:', err);
     res.status(500).json({ error: 'Error al obtener elecciones' });
   }
 };
@@ -19,7 +19,7 @@ const getEleccionById = async (req, res) => {
     }
     res.json(eleccion);
   } catch (err) {
-    console.error('🔴 Error en getEleccionById:', err);
+    console.error('Error en getEleccionById:', err);
     res.status(500).json({ error: 'Error al buscar elección' });
   }
 };
@@ -29,7 +29,7 @@ const createEleccion = async (req, res) => {
     const id = await eleccionService.crearEleccion(req.body);
     res.status(201).json({ message: 'Elección creada', id });
   } catch (err) {
-    console.error('🔴 Error en createEleccion:', err);
+    console.error('Error en createEleccion:', err);
     res.status(500).json({ error: 'Error al crear elección' });
   }
 };
@@ -43,7 +43,7 @@ const updateEleccion = async (req, res) => {
     }
     res.json({ message: 'Elección actualizada' });
   } catch (err) {
-    console.error('🔴 Error en updateEleccion:', err);
+    console.error('Error en updateEleccion:', err);
     res.status(500).json({ error: 'Error al actualizar elección' });
   }
 };
@@ -57,7 +57,7 @@ const deleteEleccion = async (req, res) => {
     }
     res.json({ message: 'Elección eliminada' });
   } catch (err) {
-    console.error('🔴 Error en deleteEleccion:', err);
+    console.error('Error en deleteEleccion:', err);
     res.status(500).json({ error: 'Error al eliminar elección' });
   }
 };

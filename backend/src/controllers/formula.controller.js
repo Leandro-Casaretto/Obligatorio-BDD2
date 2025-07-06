@@ -5,7 +5,7 @@ const getAllFormulas = async (req, res) => {
     const formulas = await formulaService.obtenerTodasLasFormulas();
     res.json(formulas);
   } catch (err) {
-    console.error('🔴 Error en getAllFormulas:', err);
+    console.error('Error en getAllFormulas:', err);
     res.status(500).json({ error: 'Error al obtener fórmulas' });
   }
 };
@@ -21,7 +21,7 @@ const getFormulaById = async (req, res) => {
 
     res.json(formula);
   } catch (err) {
-    console.error('🔴 Error en getFormulaById:', err);
+    console.error('Error en getFormulaById:', err);
     res.status(500).json({ error: 'Error al buscar fórmula' });
   }
 };
@@ -32,7 +32,7 @@ const createFormula = async (req, res) => {
     const result = await formulaService.crearFormula(formula);
     res.status(201).json({ mensaje: 'Fórmula creada correctamente' });
   } catch (err) {
-    console.error('🔴 Error en createFormula:', err);
+    console.error('Error en createFormula:', err);
     res.status(500).json({ error: 'Error al crear fórmula' });
   }
 };
@@ -43,7 +43,7 @@ const deleteFormula = async (req, res) => {
     const result = await formulaService.eliminarFormula(id);
     res.json({ mensaje: 'Fórmula eliminada correctamente' });
   } catch (err) {
-    console.error('🔴 Error en deleteFormula:', err);
+    console.error('Error en deleteFormula:', err);
     res.status(500).json({ error: 'Error al eliminar fórmula' });
   }
 };

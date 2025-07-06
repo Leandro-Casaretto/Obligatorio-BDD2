@@ -19,7 +19,7 @@ const createUser = async () => {
   try {
     console.log('🔧 Creando nuevo usuario...\n');
 
-    // Obtener datos del usuario
+   
     const ci = await question('Ingrese el CI: ');
     const cc = await question('Ingrese la credencial cívica (CC): ');
     const nombre = await question('Ingrese el nombre: ');
@@ -39,11 +39,11 @@ const createUser = async () => {
       return;
     }
 
-    // 1. Verificar si la persona ya existe
+    
     const checkPersona = 'SELECT * FROM persona WHERE ci = ?';
     db.query(checkPersona, [ci], (err, personaResults) => {
       if (err) {
-        console.log('❌ Error al verificar persona:', err.message);
+        console.log('Error al verificar persona:', err.message);
         rl.close();
         return;
       }
@@ -51,51 +51,51 @@ const createUser = async () => {
       if (personaResults.length > 0) {
         console.log('⚠️  La persona ya existe, actualizando datos...');
         
-        // Actualizar persona
+        
         const updatePersona = 'UPDATE persona SET cc = ?, nombre = ?, apellido = ? WHERE ci = ?';
         db.query(updatePersona, [cc, nombre, apellido, ci], (err, result) => {
           if (err) {
-            console.log('❌ Error al actualizar persona:', err.message);
+            console.log('Error al actualizar persona:', err.message);
             rl.close();
             return;
           }
-          console.log('✅ persona actualizada correctamente');
+          console.log('persona actualizada correctamente');
           createOrUpdateUsuario();
         });
       } else {
-        console.log('✅ Creando nueva persona...');
+        console.log('Creando nueva persona...');
         
-        // Crear persona
+        
         const createPersona = 'INSERT INTO persona (ci, cc, nombre, apellido) VALUES (?, ?, ?, ?)';
         db.query(createPersona, [ci, cc, nombre, apellido], (err, result) => {
           if (err) {
-            console.log('❌ Error al crear persona:', err.message);
+            console.log('Error al crear persona:', err.message);
             rl.close();
             return;
           }
-          console.log('✅ persona creada correctamente');
+          console.log('persona creada correctamente');
           createOrUpdateUsuario();
         });
       }
     });
 
     const createOrUpdateUsuario = () => {
-      // 2. Verificar si el usuario ya existe
+     
       const checkUsuario = 'SELECT * FROM usuario WHERE cc = ?';
       db.query(checkUsuario, [cc], (err, usuarioResults) => {
         if (err) {
-          console.log('❌ Error al verificar usuario:', err.message);
+          console.log('Error al verificar usuario:', err.message);
           rl.close();
           return;
         }
 
         if (usuarioResults.length > 0) {
-          console.log('⚠️  El usuario ya existe, actualizando contraseña...');
+          console.log('El usuario ya existe, actualizando contraseña...');
           
           // Actualizar contraseña
           bcrypt.hash(password, 10, (err, hash) => {
             if (err) {
-              console.log('❌ Error al hashear contraseña:', err.message);
+              console.log('Error al hashear contraseña:', err.message);
               rl.close();
               return;
             }
@@ -103,21 +103,21 @@ const createUser = async () => {
             const updateUsuario = 'UPDATE usuario SET password = ? WHERE cc = ?';
             db.query(updateUsuario, [hash, cc], (err, result) => {
               if (err) {
-                console.log('❌ Error al actualizar usuario:', err.message);
+                console.log('Error al actualizar usuario:', err.message);
                 rl.close();
                 return;
               }
-              console.log('✅ Contraseña actualizada correctamente');
+              console.log('Contraseña actualizada correctamente');
               showSuccess();
             });
           });
         } else {
-          console.log('✅ Creando nuevo usuario...');
+          console.log('Creando nuevo usuario...');
           
           // Crear usuario
           bcrypt.hash(password, 10, (err, hash) => {
             if (err) {
-              console.log('❌ Error al hashear contraseña:', err.message);
+              console.log('Error al hashear contraseña:', err.message);
               rl.close();
               return;
             }
@@ -125,11 +125,11 @@ const createUser = async () => {
             const createUsuario = 'INSERT INTO usuario (ci, cc, password, habilitado) VALUES (?, ?, ?, TRUE)';
             db.query(createUsuario, [ci, cc, hash], (err, result) => {
               if (err) {
-                console.log('❌ Error al crear usuario:', err.message);
+                console.log('Error al crear usuario:', err.message);
                 rl.close();
                 return;
               }
-              console.log('✅ usuario creado correctamente');
+              console.log('usuario creado correctamente');
               showSuccess();
             });
           });
@@ -138,13 +138,13 @@ const createUser = async () => {
     };
 
     const showSuccess = () => {
-      console.log('\n🎉 ¡usuario creado/actualizado exitosamente!');
-      console.log('\n📝 Credenciales para login:');
+      console.log('\n ¡usuario creado/actualizado exitosamente!');
+      console.log('\n Credenciales para login:');
       console.log(`   - CC: ${cc}`);
       console.log(`   - Contraseña: ${password}`);
-      console.log('\n✅ Puedes usar estas credenciales para hacer login');
+      console.log('\n Puedes usar estas credenciales para hacer login');
       
-      // Verificar que funciona
+      
       const verifySql = `
         SELECT u.*, p.nombre, p.apellido
         FROM usuario u
@@ -154,11 +154,11 @@ const createUser = async () => {
       
       db.query(verifySql, [cc], async (err, results) => {
         if (err) {
-          console.log('❌ Error al verificar usuario:', err.message);
+          console.log('Error al verificar usuario:', err.message);
         } else if (results.length > 0) {
           const usuario = results[0];
           const match = await bcrypt.compare(password, usuario.password);
-          console.log(`🔐 Verificación de login: ${match ? '✅ FUNCIONA' : '❌ NO FUNCIONA'}`);
+          console.log(`Verificación de login: ${match ? 'FUNCIONA' : 'NO FUNCIONA'}`);
         }
         
         rl.close();
@@ -167,11 +167,11 @@ const createUser = async () => {
     };
 
   } catch (error) {
-    console.error('❌ Error:', error);
+    console.error('Error:', error);
     rl.close();
     db.end();
   }
 };
 
-// Ejecutar
+
 createUser(); 

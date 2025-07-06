@@ -6,19 +6,19 @@ const createVoto = async (req, res) => {
     const result = await votoService.crearVoto(voto);
     res.status(201).json({ mensaje: 'voto registrado correctamente' });
   } catch (err) {
-    console.error('🔴 Error en createVoto:', err);
+    console.error('Error en createVoto:', err);
     res.status(500).json({ error: 'Error al registrar el voto' });
   }
 };
 
-// Nuevo: handler robusto para POST /votar
+
 const registrarVotoCompleto = async (req, res) => {
   try {
     const datos = req.body;
     const result = await votoService.registrarVotoCompleto(datos);
     res.status(201).json(result);
   } catch (err) {
-    console.error('🔴 Error en registrarVotoCompleto:', err);
+    console.error('Error en registrarVotoCompleto:', err);
     res.status(400).json({ error: err.message || 'Error al registrar el voto' });
   }
 };
@@ -28,7 +28,7 @@ const getAllVotos = async (req, res) => {
     const votos = await votoService.obtenerTodosLosVotos();
     res.json(votos);
   } catch (err) {
-    console.error('🔴 Error en getAllVotos:', err);
+    console.error('Error en getAllVotos:', err);
     res.status(500).json({ error: 'Error al obtener los votos' });
   }
 };
@@ -44,7 +44,7 @@ const getVotoById = async (req, res) => {
 
     res.json(voto);
   } catch (err) {
-    console.error('🔴 Error en getVotoById:', err);
+    console.error('Error en getVotoById:', err);
     res.status(500).json({ error: 'Error al buscar el voto' });
   }
 };

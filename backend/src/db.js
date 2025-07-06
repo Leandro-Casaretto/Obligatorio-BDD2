@@ -1,7 +1,6 @@
 const mysql = require('mysql2');
 const path = require('path');
 
-// Cargar variables de entorno desde la carpeta backend
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
 const connection = mysql.createConnection({
@@ -15,10 +14,10 @@ const connection = mysql.createConnection({
 
 connection.connect(err => {
   if (err) {
-    console.error('❌ Error al conectar con MySQL:', err.message);
+    console.error('Error al conectar con MySQL:', err.message);
     return;
   }
-  console.log('✅ Conectado a MySQL correctamente.');
+  console.log('Conectado a MySQL correctamente.');
 });
 
 module.exports = connection;

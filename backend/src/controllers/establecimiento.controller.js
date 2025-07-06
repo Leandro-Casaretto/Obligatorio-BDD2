@@ -5,7 +5,7 @@ const getAll = async (req, res) => {
     const datos = await establecimientoService.obtenerTodos();
     res.json(datos);
   } catch (err) {
-    console.error('🔴 Error en getAll:', err);
+    console.error('Error en getAll:', err);
     res.status(500).json({ error: 'Error al obtener establecimientos' });
   }
 };
@@ -21,7 +21,7 @@ const getById = async (req, res) => {
 
     res.json(est);
   } catch (err) {
-    console.error('🔴 Error en getById:', err);
+    console.error('Error en getById:', err);
     res.status(500).json({ error: 'Error al buscar establecimiento' });
   }
 };
@@ -32,7 +32,7 @@ const create = async (req, res) => {
     const nuevo = await establecimientoService.crear(datos);
     res.status(201).json(nuevo);
   } catch (err) {
-    console.error('🔴 Error en create:', err);
+    console.error('Error en create:', err);
     res.status(500).json({ error: 'Error al crear establecimiento' });
   }
 };
@@ -44,7 +44,7 @@ const update = async (req, res) => {
     await establecimientoService.actualizar(id, datos);
     res.json({ mensaje: 'establecimiento actualizado' });
   } catch (err) {
-    console.error('🔴 Error en update:', err);
+    console.error('Error en update:', err);
     res.status(500).json({ error: 'Error al actualizar establecimiento' });
   }
 };
@@ -55,7 +55,7 @@ const remove = async (req, res) => {
     await establecimientoService.eliminar(id);
     res.json({ mensaje: 'establecimiento eliminado' });
   } catch (err) {
-    console.error('🔴 Error en remove:', err);
+    console.error('Error en remove:', err);
     res.status(500).json({ error: 'Error al eliminar establecimiento' });
   }
 };
