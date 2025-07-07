@@ -70,7 +70,7 @@ const getResultadosPorCandidato = (id_circuito, callback) => {
   const sql = `
     SELECT 
       COALESCE(PA.nombre, 'En Blanco') AS partido,
-      COALESCE(PER.nombre, 'En Blanco') AS candidato,
+      COALESCE(CONCAT(PER.nombre, ' ', PER.apellido), 'En Blanco') AS candidato,
       COUNT(V.id_voto) AS cantidad_votos
     FROM voto V
     LEFT JOIN voto_lista VL ON V.id_voto = VL.id_voto
@@ -190,16 +190,15 @@ const getResultadosPorCandidatoDepartamento = (id_departamento, callback) => {
   const sql = `
     SELECT 
       COALESCE(P.nombre, 'En Blanco') AS partido,
-      COALESCE(PE.nombre, 'En Blanco') AS candidato,
+      COALESCE(CONCAT(PE.nombre, ' ', PE.apellido), 'En Blanco') AS candidato,
       COUNT(V.id_voto) AS cantidad_votos
     FROM voto V
     LEFT JOIN voto_lista VL ON V.id_voto = VL.id_voto
     LEFT JOIN lista L ON VL.id_lista = L.id_lista
-    LEFT JOIN candidato_lista CL ON L.id_lista = CL.id_lista AND CL.organo = 'presidente' AND CL.orden = 1
-    LEFT JOIN candidato C ON CL.ci = C.ci
-    LEFT JOIN persona PE ON C.ci = PE.ci
     LEFT JOIN lista_apoya LA ON L.id_lista = LA.id_lista
     LEFT JOIN partido P ON LA.id_partido = P.id_partido
+    LEFT JOIN formulapresidencial FP ON LA.id_formula = FP.id_formula
+    LEFT JOIN persona PE ON FP.ci_presidente = PE.ci
     LEFT JOIN circuito CI ON V.id_circuito = CI.id_circuito
     LEFT JOIN establecimiento E ON CI.id_establecimiento = E.id_establecimiento
     WHERE V.estado = 'válido' AND E.id_departamento = ?
@@ -233,7 +232,7 @@ const getCandidatoGanadorPorDepartamento = (callback) => {
     SELECT 
       D.nombre AS departamento,
       P.nombre AS partido,
-      PE.nombre AS presidente,
+      CONCAT(PE.nombre, ' ', PE.apellido) AS presidente,
       COUNT(V.id_voto) AS cantidad_votos
     FROM voto V
     JOIN circuito C ON V.id_circuito = C.id_circuito
