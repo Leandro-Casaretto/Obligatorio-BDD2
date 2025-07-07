@@ -3,7 +3,7 @@ import { useAuth } from './context/AuthContext';
 import LoginScreen from './components/LoginScreen';
 import CircuitoScreen from './components/CircuitoScreen';
 import VotacionScreen from './components/VotacionScreen';
-import ThankYouScreen from './components/ThankYouScreen';
+import ConfirmacionScreen from './components/ConfirmacionScreen';
 import PresidenteLoginScreen from './components/PresidenteLoginScreen';
 import { Fab, Paper, Typography, Button, Box, CircularProgress, Alert, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Grid } from '@mui/material';
 import SecurityIcon from '@mui/icons-material/Security';
@@ -32,23 +32,23 @@ function App() {
   const [loadingGanadores, setLoadingGanadores] = useState(false);
   const [errorGanadores, setErrorGanadores] = useState('');
 
-  // Función para resetear el estado cuando vuelve al login
+  
   const resetearEstado = () => {
     setPantalla('seleccion-circuito');
     setIdCircuito(null);
-    logout(); // Cerrar sesión del usuario actual
+    logout(); 
   };
 
-  // Cargar estado de la mesa cuando el presidente entra al panel
+  
   useEffect(() => {
     const fetchEstadoMesa = async () => {
       if (pantalla === 'panel-presidente' && presidenteData) {
         setLoadingMesa(true);
         setErrorMesa('');
         try {
-          // Suponemos que hay un endpoint GET /mesas/:id_mesa que devuelve el estado
+          
           const res = await axios.get(`http://localhost:3000/mesas/${presidenteData.mesa.id_mesa}`);
-          setEstadoMesa(res.data.estado); // debe devolver { estado: 'abierta' | 'cerrada' }
+          setEstadoMesa(res.data.estado); 
         } catch (err) {
           setErrorMesa('No se pudo obtener el estado de la mesa');
         } finally {
@@ -59,12 +59,12 @@ function App() {
     fetchEstadoMesa();
   }, [pantalla, presidenteData]);
 
-  // Acción para cerrar la mesa
+  
   const handleCerrarMesa = async () => {
     setCerrandoMesa(true);
     setErrorMesa('');
     try {
-      // Suponemos que hay un endpoint PATCH /mesas/:id_mesa/cerrar
+      
       await axios.patch(`http://localhost:3000/mesas/${presidenteData.mesa.id_mesa}/cerrar`);
       setEstadoMesa('cerrada');
       setSnackbar({ open: true, message: 'Mesa cerrada exitosamente', severity: 'success' });
@@ -76,7 +76,7 @@ function App() {
     }
   };
 
-  // Acción para ver resultados
+  
   const handleVerResultados = async () => {
     setLoadingResultados(true);
     setErrorResultados('');
@@ -87,8 +87,7 @@ function App() {
     setErrorGanadores('');
     try {
       const idCircuito = presidenteData.mesa.id_circuito;
-      const idDepartamento = presidenteData.mesa.id_departamento; // TODO: Si no está, obtenerlo con una consulta
-      // Hacer 7 peticiones en paralelo (agregamos ganadores por departamento)
+      const idDepartamento = presidenteData.mesa.id_departamento; 
       const [resLista, resPartido, resCandidato, resListaDepto, resPartidoDepto, resCandidatoDepto, resGanadores] = await Promise.all([
         axios.get(`http://localhost:3000/resultados/circuito/${idCircuito}/por-lista`),
         axios.get(`http://localhost:3000/resultados/circuito/${idCircuito}/por-partido`),
@@ -134,10 +133,10 @@ function App() {
     );
   }
 
-  // Mostrar panel de presidente si corresponde
+  
   if (pantalla === 'panel-presidente' && presidenteData) {
-    // Obtener id_departamento de la mesa
-    const idDepartamento = presidenteData.mesa.id_departamento; // TODO: Si no está, obtenerlo con una consulta
+    
+    const idDepartamento = presidenteData.mesa.id_departamento; 
 
     return (
       <Box sx={{ minHeight: '100vh', minWidth: '100vw', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f7f9fb' }}>
@@ -502,7 +501,7 @@ function App() {
 
   if (pantalla === 'final') {
     return (
-      <ThankYouScreen 
+      <ConfirmacionScreen 
         onVolverALogin={resetearEstado}
       />
     );

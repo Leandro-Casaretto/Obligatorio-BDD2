@@ -6,7 +6,6 @@ export const AuthProvider = ({ children }) => {
   const [usuario, setUsuario] = useState(null);
 
   useEffect(() => {
-    // Intentar recuperar el usuario desde localStorage (opcional)
     const token = localStorage.getItem('token');
     const user = localStorage.getItem('usuario');
     if (token && user) {
@@ -33,5 +32,4 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// Hook personalizado para acceder al contexto
 export const useAuth = () => useContext(AuthContext); 
