@@ -3,7 +3,7 @@ import { useAuth } from './context/AuthContext';
 import LoginScreen from './components/LoginScreen';
 import CircuitoScreen from './components/CircuitoScreen';
 import VotacionScreen from './components/VotacionScreen';
-import ThankYouScreen from './components/ThankYouScreen';
+import ConfirmacionScreen from './components/ConfirmacionScreen';
 import PresidenteLoginScreen from './components/PresidenteLoginScreen';
 import { Fab, Paper, Typography, Button, Box, CircularProgress, Alert, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Grid } from '@mui/material';
 import SecurityIcon from '@mui/icons-material/Security';
@@ -28,24 +28,27 @@ function App() {
   const [resultadosDepto, setResultadosDepto] = useState(null);
   const [loadingDepto, setLoadingDepto] = useState(false);
   const [errorDepto, setErrorDepto] = useState('');
+  const [ganadoresDepto, setGanadoresDepto] = useState(null);
+  const [loadingGanadores, setLoadingGanadores] = useState(false);
+  const [errorGanadores, setErrorGanadores] = useState('');
 
-  // Función para resetear el estado cuando vuelve al login
+  
   const resetearEstado = () => {
     setPantalla('seleccion-circuito');
     setIdCircuito(null);
-    logout(); // Cerrar sesión del usuario actual
+    logout(); 
   };
 
-  // Cargar estado de la mesa cuando el presidente entra al panel
+  
   useEffect(() => {
     const fetchEstadoMesa = async () => {
       if (pantalla === 'panel-presidente' && presidenteData) {
         setLoadingMesa(true);
         setErrorMesa('');
         try {
-          // Suponemos que hay un endpoint GET /mesas/:id_mesa que devuelve el estado
+          
           const res = await axios.get(`http://localhost:3000/mesas/${presidenteData.mesa.id_mesa}`);
-          setEstadoMesa(res.data.estado); // debe devolver { estado: 'abierta' | 'cerrada' }
+          setEstadoMesa(res.data.estado); 
         } catch (err) {
           setErrorMesa('No se pudo obtener el estado de la mesa');
         } finally {
@@ -56,12 +59,12 @@ function App() {
     fetchEstadoMesa();
   }, [pantalla, presidenteData]);
 
-  // Acción para cerrar la mesa
+  
   const handleCerrarMesa = async () => {
     setCerrandoMesa(true);
     setErrorMesa('');
     try {
-      // Suponemos que hay un endpoint PATCH /mesas/:id_mesa/cerrar
+      
       await axios.patch(`http://localhost:3000/mesas/${presidenteData.mesa.id_mesa}/cerrar`);
       setEstadoMesa('cerrada');
       setSnackbar({ open: true, message: 'Mesa cerrada exitosamente', severity: 'success' });
@@ -73,24 +76,26 @@ function App() {
     }
   };
 
-  // Acción para ver resultados
+  
   const handleVerResultados = async () => {
     setLoadingResultados(true);
     setErrorResultados('');
     setMostrarResultados(true);
     setLoadingDepto(true);
     setErrorDepto('');
+    setLoadingGanadores(true);
+    setErrorGanadores('');
     try {
       const idCircuito = presidenteData.mesa.id_circuito;
-      const idDepartamento = presidenteData.mesa.id_departamento; // TODO: Si no está, obtenerlo con una consulta
-      // Hacer 6 peticiones en paralelo
-      const [resLista, resPartido, resCandidato, resListaDepto, resPartidoDepto, resCandidatoDepto] = await Promise.all([
+      const idDepartamento = presidenteData.mesa.id_departamento; 
+      const [resLista, resPartido, resCandidato, resListaDepto, resPartidoDepto, resCandidatoDepto, resGanadores] = await Promise.all([
         axios.get(`http://localhost:3000/resultados/circuito/${idCircuito}/por-lista`),
         axios.get(`http://localhost:3000/resultados/circuito/${idCircuito}/por-partido`),
         axios.get(`http://localhost:3000/resultados/circuito/por-candidato/${idCircuito}`),
         idDepartamento ? axios.get(`http://localhost:3000/resultados/departamento/${idDepartamento}/por-lista`) : Promise.resolve({ data: [] }),
         idDepartamento ? axios.get(`http://localhost:3000/resultados/departamento/${idDepartamento}/por-partido`) : Promise.resolve({ data: [] }),
-        idDepartamento ? axios.get(`http://localhost:3000/resultados/departamento/${idDepartamento}/por-candidato`) : Promise.resolve({ data: [] })
+        idDepartamento ? axios.get(`http://localhost:3000/resultados/departamento/${idDepartamento}/por-candidato`) : Promise.resolve({ data: [] }),
+        axios.get(`http://localhost:3000/resultados/ganador-por-departamento`)
       ]);
       setResultados({
         porLista: resLista.data,
@@ -102,12 +107,15 @@ function App() {
         porPartido: resPartidoDepto.data,
         porCandidato: resCandidatoDepto.data
       });
+      setGanadoresDepto(resGanadores.data);
     } catch (err) {
       setErrorResultados('No se pudieron obtener los resultados');
       setErrorDepto('No se pudieron obtener los resultados del departamento');
+      setErrorGanadores('No se pudieron obtener los ganadores por departamento');
     } finally {
       setLoadingResultados(false);
       setLoadingDepto(false);
+      setLoadingGanadores(false);
     }
   };
 
@@ -125,10 +133,10 @@ function App() {
     );
   }
 
-  // Mostrar panel de presidente si corresponde
+  
   if (pantalla === 'panel-presidente' && presidenteData) {
-    // Obtener id_departamento de la mesa
-    const idDepartamento = presidenteData.mesa.id_departamento; // TODO: Si no está, obtenerlo con una consulta
+    
+    const idDepartamento = presidenteData.mesa.id_departamento; 
 
     return (
       <Box sx={{ minHeight: '100vh', minWidth: '100vw', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f7f9fb' }}>
@@ -383,6 +391,48 @@ function App() {
                       ) : null}
                     </Box>
                   </Grid>
+                  {/* Ganadores por Departamento */}
+                  <Grid item xs={12}>
+                    <Box>
+                      <Typography variant="h5" fontWeight={700} align="center" gutterBottom sx={{ mt: 3, mb: 2 }}>
+                        Ganadores por Departamento
+                      </Typography>
+                      {loadingGanadores ? (
+                        <Box sx={{ display: 'flex', justifyContent: 'center', my: 3 }}>
+                          <CircularProgress />
+                        </Box>
+                      ) : errorGanadores ? (
+                        <Alert severity="error" sx={{ mb: 2 }}>{errorGanadores}</Alert>
+                      ) : ganadoresDepto && ganadoresDepto.length > 0 ? (
+                        <TableContainer component={Paper}>
+                          <Table>
+                            <TableHead>
+                              <TableRow>
+                                <TableCell><strong>Departamento</strong></TableCell>
+                                <TableCell><strong>Partido Ganador</strong></TableCell>
+                                <TableCell><strong>Candidato Presidente</strong></TableCell>
+                                <TableCell><strong>Votos Obtenidos</strong></TableCell>
+                              </TableRow>
+                            </TableHead>
+                            <TableBody>
+                              {ganadoresDepto.map((ganador, idx) => (
+                                <TableRow key={idx} sx={{ backgroundColor: idx % 2 === 0 ? '#f5f5f5' : 'white' }}>
+                                  <TableCell><strong>{ganador.departamento}</strong></TableCell>
+                                  <TableCell>{ganador.partido}</TableCell>
+                                  <TableCell>{ganador.presidente}</TableCell>
+                                  <TableCell>{ganador.cantidad_votos}</TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </TableContainer>
+                      ) : (
+                        <Alert severity="info" sx={{ mb: 2 }}>
+                          No hay datos de ganadores disponibles
+                        </Alert>
+                      )}
+                    </Box>
+                  </Grid>
                 </Grid>
               )}
             </>
@@ -451,7 +501,7 @@ function App() {
 
   if (pantalla === 'final') {
     return (
-      <ThankYouScreen 
+      <ConfirmacionScreen 
         onVolverALogin={resetearEstado}
       />
     );

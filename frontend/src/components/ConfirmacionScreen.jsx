@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Box, Paper, Typography, CircularProgress, Alert } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
-function ThankYouScreen({ onVolverALogin }) {
+function ConfirmacionScreen({ onVolverALogin }) {
   const [tiempoRestante, setTiempoRestante] = useState(5);
 
   useEffect(() => {
@@ -10,7 +10,7 @@ function ThankYouScreen({ onVolverALogin }) {
       setTiempoRestante((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          // Llamar a la función para volver al login
+          
           if (onVolverALogin) onVolverALogin();
           return 0;
         }
@@ -66,4 +66,4 @@ function ThankYouScreen({ onVolverALogin }) {
   );
 }
 
-export default ThankYouScreen; 
+export default ConfirmacionScreen; 
