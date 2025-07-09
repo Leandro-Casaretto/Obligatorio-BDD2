@@ -188,13 +188,7 @@ function VotacionScreen({ idEleccion = 1, idCircuito, onVotar, onVolver }) {
                 </Paper>
               </Grid>
             </Grid>
-            {seleccion && (
-              <Alert severity="info" sx={{ mb: 2 }}>
-                {seleccion === 'blanco' && 'Has seleccionado: Voto en Blanco'}
-                {seleccion === 'nulo' && 'Has seleccionado: Voto Nulo'}
-                {typeof seleccion === 'number' && `Has seleccionado la lista número ${seleccion}`}
-              </Alert>
-            )}
+            
             <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, mt: 2 }}>
               <Button variant="outlined" onClick={onVolver} disabled={enviando || confirmado}>VOLVER</Button>
               <Button variant="contained" color="primary" disabled={!seleccion || enviando || confirmado} onClick={handleConfirmar}>
