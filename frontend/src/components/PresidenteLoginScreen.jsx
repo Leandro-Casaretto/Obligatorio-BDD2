@@ -14,6 +14,7 @@ function PresidenteLoginScreen({ onLoginSuccess, onVolver }) {
     setError('');
     setLoading(true);
     try {
+      // Enviamos las credenciales al endpoint de login del presidente
       const res = await axios.post('http://localhost:3000/auth/login-presidente', { cc, password });
       if (onLoginSuccess) onLoginSuccess(res.data);
     } catch (err) {

@@ -5,12 +5,13 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 function ConfirmacionScreen({ onVolverALogin }) {
   const [tiempoRestante, setTiempoRestante] = useState(5);
 
+  // Eff timer
   useEffect(() => {
     const timer = setInterval(() => {
       setTiempoRestante((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          
+          // Volver al login
           if (onVolverALogin) onVolverALogin();
           return 0;
         }

@@ -13,19 +13,21 @@ function CircuitoScreen({ idEleccion = 1, onContinuar, onVolver }) {
   const [mensaje, setMensaje] = useState('');
   const [error, setError] = useState('');
 
+  // Eff cuando montamos o cambiamos usuario/eleccion
   useEffect(() => {
+    // Obtenemos el circuito asignado al usuario
     const fetchCircuito = async () => {
       try {
-        // Obtener ambos datos: id_circuito y numero_circuito
         const res = await axios.get(`http://localhost:3000/persona-vota/${usuario.ci}/${idEleccion}`);
         setIdCircuito(res.data.id_circuito);
-        // Ahora el número visible
+        // Guardamos el número
         const resNum = await axios.get(`http://localhost:3000/persona-vota/${usuario.ci}/${idEleccion}/numero-circuito`);
         setNumeroCircuito(resNum.data.numero_circuito);
       } catch (err) {
         setError('No se pudo obtener el circuito asignado.');
       }
     };
+    // Solo si tenemos la cedula
     if (usuario?.ci) fetchCircuito();
   }, [usuario, idEleccion]);
 
@@ -34,6 +36,7 @@ function CircuitoScreen({ idEleccion = 1, onContinuar, onVolver }) {
     setMensaje('');
     setError('');
     setVerificado(false);
+    // Comparamos el circuito ingresado con el asignado
     if (parseInt(inputCircuito) === numeroCircuito) {
       setVerificado(true);
       setMensaje('Circuito verificado correctamente. Puede continuar con el proceso de votación.');

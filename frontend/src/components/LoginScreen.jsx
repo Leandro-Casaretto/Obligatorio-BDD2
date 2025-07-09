@@ -8,6 +8,7 @@ function LoginScreen() {
   const [cc, setCC] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  // Obtenemos el login del contexto 
   const { login } = useAuth();
 
   const handleLogin = async (e) => {
@@ -15,7 +16,9 @@ function LoginScreen() {
     setError('');
 
     try {
+      // Enviamos las credenciales al backend
       const res = await axios.post('http://localhost:3000/auth/login', { cc, password });
+      // Si el login es exitoso, guardamos el token y la data en el contexto 
       login(res.data.usuario, res.data.token);
     } catch (err) {
       setError('Credenciales inválidas');

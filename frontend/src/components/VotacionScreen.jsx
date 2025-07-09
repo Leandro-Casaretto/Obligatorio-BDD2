@@ -15,10 +15,12 @@ function VotacionScreen({ idEleccion = 1, idCircuito, onVotar, onVolver }) {
   const [enviando, setEnviando] = useState(false);
 
   useEffect(() => {
+    // Obtenemos listas disponibles
     const fetchListas = async () => {
       setLoading(true);
       setError('');
       try {
+        // Endpoint para obtener las listas por circuito y elección
         const res = await axios.get(`http://localhost:3000/listas/por-circuito/${idCircuito}/${idEleccion}`);
         setListas(res.data);
       } catch (err) {
@@ -27,9 +29,11 @@ function VotacionScreen({ idEleccion = 1, idCircuito, onVotar, onVolver }) {
         setLoading(false);
       }
     };
+    // Solo si tenemos un circuito válido
     if (idCircuito) fetchListas();
   }, [idCircuito, idEleccion]);
 
+  // Manejo de selección de lista
   const handleSeleccion = (id_lista) => {
     setSeleccion(id_lista);
     setConfirmado(false);
@@ -51,16 +55,18 @@ function VotacionScreen({ idEleccion = 1, idCircuito, onVotar, onVolver }) {
     setError('');
   };
 
+  // Manejo de confirmación del voto
   const handleConfirmar = async () => {
     setEnviando(true);
     setMensaje('');
     setError('');
     try {
+      // Determinamos el tipo de voto según lo que eligió
       let tipo_voto = 'valido';
       let id_lista = null;
       if (seleccion === 'blanco') tipo_voto = 'blanco';
       else if (seleccion === 'nulo') tipo_voto = 'anulado';
-      else id_lista = seleccion;
+      else id_lista = seleccion; // Si no es blanco o nulo, es una lista válida
       const payload = {
         ci: usuario.ci,
         id_eleccion: idEleccion,
@@ -69,6 +75,7 @@ function VotacionScreen({ idEleccion = 1, idCircuito, onVotar, onVolver }) {
         id_lista,
         es_observado: false
       };
+      // Enviamos el voto al backend
       await axios.post('http://localhost:3000/votos/votar', payload);
       setConfirmado(true);
       setMensaje('¡Voto registrado exitosamente!');
@@ -76,19 +83,18 @@ function VotacionScreen({ idEleccion = 1, idCircuito, onVotar, onVolver }) {
     } catch (err) {
       const errorMessage = err.response?.data?.error || 'Error al registrar el voto';
       setError(errorMessage);
-      console.log('Error exacto:', errorMessage); // Debug
+      console.log('Error exacto:', errorMessage); 
     } finally {
       setEnviando(false);
     }
   };
 
-  // Función para manejar el retorno al inicio
+  // Volvemos al inicio
   const handleVolverInicio = () => {
     logout();
     if (onVolver) onVolver();
   };
 
-  // Verificar si el error es de "ya votó" - múltiples variaciones
   const yaVoto = error && (
     error.toLowerCase().includes('ya has votado') ||
     error.toLowerCase().includes('ya votó') ||
