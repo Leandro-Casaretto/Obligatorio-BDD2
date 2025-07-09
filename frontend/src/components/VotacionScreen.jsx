@@ -148,8 +148,8 @@ function VotacionScreen({ idEleccion = 1, idCircuito, onVotar, onVolver }) {
                     }}
                     onClick={() => handleSeleccion(lista.id_lista)}
                   >
-                    <Typography variant="h5" color="primary" fontWeight={700}>{lista.numero_lista}</Typography>
-                    <Typography variant="body1">{lista.partido}</Typography>
+                    <Typography variant="h5" color={seleccion === lista.id_lista ? 'white' : 'primary'} fontWeight={700}>{lista.numero_lista}</Typography>
+                    <Typography variant="body1" color={seleccion === lista.id_lista ? 'white' : 'text.primary'}>{lista.partido}</Typography>
                   </Paper>
                 </Grid>
               ))}
@@ -167,7 +167,7 @@ function VotacionScreen({ idEleccion = 1, idCircuito, onVotar, onVolver }) {
                   }}
                   onClick={handleVotoBlanco}
                 >
-                  <Typography variant="h5" color="primary" fontWeight={700}>Voto en Blanco</Typography>
+                  <Typography variant="h5" color={seleccion === 'blanco' ? 'white' : 'primary'} fontWeight={700}>Voto en Blanco</Typography>
                 </Paper>
               </Grid>
               {/* Opción voto nulo */}
@@ -184,7 +184,7 @@ function VotacionScreen({ idEleccion = 1, idCircuito, onVotar, onVolver }) {
                   }}
                   onClick={handleVotoNulo}
                 >
-                  <Typography variant="h5" color="primary" fontWeight={700}>Voto Nulo</Typography>
+                  <Typography variant="h5" color={seleccion === 'nulo' ? 'white' : 'primary'} fontWeight={700}>Voto Nulo</Typography>
                 </Paper>
               </Grid>
             </Grid>

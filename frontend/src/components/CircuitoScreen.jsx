@@ -14,13 +14,12 @@ function CircuitoScreen({ idEleccion = 1, onContinuar, onVolver }) {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    // Obtener número de circuito visible y el id_circuito desde el backend
     const fetchCircuito = async () => {
       try {
         // Obtener ambos datos: id_circuito y numero_circuito
         const res = await axios.get(`http://localhost:3000/persona-vota/${usuario.ci}/${idEleccion}`);
         setIdCircuito(res.data.id_circuito);
-        // Ahora obtener el número visible
+        // Ahora el número visible
         const resNum = await axios.get(`http://localhost:3000/persona-vota/${usuario.ci}/${idEleccion}/numero-circuito`);
         setNumeroCircuito(resNum.data.numero_circuito);
       } catch (err) {
