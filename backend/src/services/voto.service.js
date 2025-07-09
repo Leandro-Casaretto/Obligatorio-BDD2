@@ -32,9 +32,9 @@ const obtenerVotoPorId = (id) => {
   });
 };
 
-// Nuevo: registrar voto completo
+// Registramos el voto
 const registrarVotoCompleto = async ({ ci, id_eleccion, id_circuito, tipo_voto, id_lista, es_observado }) => {
-  // 0. Verificar si ya votó
+  // Verificar si ya votó
   const registros = await new Promise((resolve, reject) => {
     personaVotaModel.verificarSiYaVoto(ci, id_eleccion, (err, results) => {
       if (err) return reject(err);
@@ -48,7 +48,7 @@ const registrarVotoCompleto = async ({ ci, id_eleccion, id_circuito, tipo_voto, 
     throw new Error('Ya has votado en esta elección.');
   }
 
-  // 0.5. Verificar que la mesa esté abierta
+  // Verificamos si la mesa está abierta
   const mesa = await new Promise((resolve, reject) => {
     mesaModel.getMesaByCircuito(id_circuito, (err, result) => {
       if (err) return reject(err);
