@@ -1,5 +1,17 @@
 const db = require('../db');
 
+/**
+ * OBTENER RESULTADOS POR LISTA EN UN CIRCUITO ESPECÍFICO
+ * 
+ * Contamos los votos por cada lista en un circuito determinado.
+ * 
+ * 1. Contamos votos válidos por lista y partido usando LEFT JOINs. 
+ * 2. Contamos votos en blanco (votos sin lista asociada pero también válidos)
+ * 3. Contamos votos anulados
+ * 4. Combinamos todos los resultados (UNION)
+ * 5. Ordenamos por cantidad de votos descendente
+ * 
+ */
 
 const getResultadosPorLista = (id_circuito, callback) => {
   const sql = `
@@ -36,6 +48,21 @@ const getResultadosPorLista = (id_circuito, callback) => {
   `;
   db.query(sql, [id_circuito, id_circuito, id_circuito], callback);
 };
+
+
+/**
+ * OBTENER RESULTADOS POR PARTIDO EN UN CIRCUITO ESPECÍFICO
+ * 
+ * Agrupamos los votos por partido político en un circuito determinado.
+ * Sumamos todos los votos de las listas que pertenecen al mismo partido.
+ * 
+ * 1. Contamos votos válidos agrupados por partido (suma todas las listas del partido)
+ * 2. Contamos votos en blanco como un "partido" separado
+ * 3. Contamos votos anulados como un "partido" separado
+ * 4. Contamos resultados con UNION
+ * 5. Ordenamos por cantidad de votos descendente
+ */
+
 
 const getResultadosPorPartido = (id_circuito, callback) => {
   const sql = `
